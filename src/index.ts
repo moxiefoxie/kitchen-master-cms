@@ -108,7 +108,14 @@ export default {
             heroDescription: `Soup dumplings, fresh sushi, and bold modern plates—crafted daily in ${location.name}.`,
             seoTitle: `Kitchen Master ${location.name} | Taiwanese & Japanese Dining`,
             seoDescription: `Explore menus, hours, reservations, and directions for Kitchen Master in ${location.city}.`,
-            seoKeywords: `Kitchen Master, ${location.name} restaurant, soup dumplings, sushi, Taiwanese food, Japanese food`,
+            seoKeywords: [
+              'Kitchen Master',
+              `${location.name} restaurant`,
+              'soup dumplings',
+              'sushi',
+              'Taiwanese food',
+              'Japanese food',
+            ],
           },
           status: 'published',
         });
