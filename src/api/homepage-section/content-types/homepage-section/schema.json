@@ -18,5 +18,8 @@
     "linkLabel": { "type": "string" },
     "linkUrl": { "type": "string" },
     "sortOrder": { "type": "integer", "default": 0 }
+  },
+  "config": {
+    "layouts": { "list": ["name", "sectionKey", "location", "sortOrder"] }
   }
 }

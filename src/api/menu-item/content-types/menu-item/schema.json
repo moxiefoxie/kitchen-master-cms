@@ -4,7 +4,8 @@
   "info": {
     "singularName": "menu-item",
     "pluralName": "menu-items",
-    "displayName": "Menu Item"
+    "displayName": "Menu Item",
+    "description": "Food, drink, and happy-hour items. Use Restaurants to filter the Content Manager; an empty Restaurants field applies everywhere."
   },
   "options": { "draftAndPublish": true },
   "attributes": {
@@ -12,7 +13,12 @@
     "price": { "type": "string", "required": true },
     "description": { "type": "text" },
     "tags": { "type": "json" },
+    "allergens": { "type": "relation", "relation": "manyToMany", "target": "api::allergen.allergen", "inversedBy": "items", "description": "Select every major allergen confirmed for this item. These selections appear as icons on the website." },
+    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Restaurant view/filter. Leave empty for an item available at every restaurant." },
     "sortOrder": { "type": "integer", "default": 0 },
     "category": { "type": "relation", "relation": "manyToOne", "target": "api::menu-category.menu-category", "inversedBy": "items" }
+  },
+  "config": {
+    "layouts": { "list": ["name", "category", "locations", "allergens"] }
   }
 }

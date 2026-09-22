@@ -15,7 +15,7 @@
     "startsAt": { "type": "datetime" },
     "endsAt": { "type": "datetime" },
     "priority": { "type": "integer", "default": 0 },
-    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location" },
+    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Leave empty to show this campaign at every restaurant." },
     "eyebrow": { "type": "string" },
     "title": { "type": "string", "required": true },
     "accent": { "type": "string" },
@@ -26,5 +26,8 @@
     "image": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "dismissalKey": { "type": "string", "required": true, "unique": true },
     "delayMs": { "type": "integer", "default": 1200, "min": 0, "max": 30000 }
+  },
+  "config": {
+    "layouts": { "list": ["name", "locations", "enabled", "startsAt"] }
   }
 }

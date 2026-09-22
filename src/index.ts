@@ -8,6 +8,42 @@ const LEGACY_CONTACT_EMAIL = 'Management@kitchenmasterga.com';
 const DEFAULT_HIRING_ROLES = [
   'Front of house', 'Server', 'Bartender', 'Host', 'Kitchen', 'Sushi chef', 'Management', 'Other',
 ];
+const ALLERGENS = [
+  { name: 'Milk', slug: 'milk', shortLabel: 'M', sortOrder: 1 },
+  { name: 'Eggs', slug: 'eggs', shortLabel: 'E', sortOrder: 2 },
+  { name: 'Fish', slug: 'fish', shortLabel: 'F', sortOrder: 3 },
+  { name: 'Shellfish', slug: 'shellfish', shortLabel: 'SH', sortOrder: 4 },
+  { name: 'Tree nuts', slug: 'tree-nuts', shortLabel: 'TN', sortOrder: 5 },
+  { name: 'Peanuts', slug: 'peanuts', shortLabel: 'P', sortOrder: 6 },
+  { name: 'Wheat', slug: 'wheat', shortLabel: 'W', sortOrder: 7 },
+  { name: 'Soy', slug: 'soy', shortLabel: 'S', sortOrder: 8 },
+  { name: 'Sesame', slug: 'sesame', shortLabel: 'SE', sortOrder: 9 },
+] as const;
+const SEEDED_ITEM_ALLERGENS: Record<string, string[]> = {
+  'Sea Salt Edamame': ['soy'],
+  'Hot & Sour Soup': ['eggs', 'soy'],
+  'Egg Drop Soup': ['eggs'],
+  'Kung Pao Chicken': ['peanuts'],
+  'Scallion Pancake': ['wheat'],
+  'Yuzu Parmesan Truffle Fries': ['milk'],
+  'Crab Rangoon': ['milk', 'fish', 'wheat'],
+  'Boom Boom Shrimp': ['shellfish'],
+  'Crab Croquette': ['shellfish'],
+  'Crab & Pork': ['shellfish'],
+  'Shrimp Shumai': ['shellfish'],
+  'Ube Cream Matcha': ['milk'],
+  'Salmon Avocado': ['fish', 'sesame'],
+  'Ahi Poke': ['fish', 'soy'],
+};
+const OWNER_LIST_LAYOUTS: Record<string, string[]> = {
+  'api::allergen.allergen': ['name', 'shortLabel', 'sortOrder'],
+  'api::menu-item.menu-item': ['name', 'category', 'locations', 'allergens'],
+  'api::menu-category.menu-category': ['name', 'menuType', 'locations', 'sortOrder'],
+  'api::happening.happening': ['title', 'happeningType', 'locations', 'enabled'],
+  'api::campaign.campaign': ['name', 'locations', 'enabled', 'startsAt'],
+  'api::homepage-section.homepage-section': ['name', 'sectionKey', 'location', 'sortOrder'],
+  'api::site-page.site-page': ['title', 'pageType', 'location', 'sortOrder'],
+};
 const SEED_MEDIA_FILES: Record<string, string> = {
   'hero.png': 'hero_d0cafda107.png',
   'soup-dumplings.png': 'soup_dumplings_835fe4bef2.png',
@@ -136,6 +172,23 @@ export default {
       });
       return uploaded[0]?.id;
     }
+
+    // Keep restaurant scope visible without requiring each owner to customize their own list views.
+    try {
+      const contentTypeService = strapi.plugin('content-manager').service('content-types');
+      for (const [uid, list] of Object.entries(OWNER_LIST_LAYOUTS)) {
+        const contentType = contentTypeService.findContentType(uid);
+        if (!contentType) continue;
+        const configuration = await contentTypeService.findConfiguration(contentType);
+        await contentTypeService.updateConfiguration(contentType, {
+          ...configuration,
+          layouts: { ...configuration.layouts, list },
+        });
+      }
+    } catch (error) {
+      strapi.log.warn(`Could not apply owner-friendly Content Manager lists: ${String(error)}`);
+    }
+
     const existingLocations = await strapi.documents('api::location.location').findMany({ limit: 1 });
 
     if (existingLocations.length === 0) {
@@ -146,6 +199,23 @@ export default {
         });
       }
     }
+
+    const allergenDocumentIds = new Map<string, string>();
+    for (const allergen of ALLERGENS) {
+      let existing = await strapi.documents('api::allergen.allergen' as any).findFirst({
+        filters: { slug: allergen.slug },
+      }) as any;
+      if (!existing) {
+        existing = await strapi.documents('api::allergen.allergen' as any).create({
+          data: allergen as any,
+          status: 'published',
+        });
+      }
+      allergenDocumentIds.set(allergen.slug, existing.documentId);
+    }
+    const allergensFor = (itemName: string) => (SEEDED_ITEM_ALLERGENS[itemName] ?? [])
+      .map((slug) => allergenDocumentIds.get(slug))
+      .filter(Boolean) as string[];
 
     for (const location of locations) {
       const existing = await strapi.documents('api::location.location').findFirst({ filters: { slug: location.slug } });
@@ -539,6 +609,7 @@ export default {
               tags: item.tags ?? [],
               sortOrder: itemIndex + 1,
               category: category.documentId,
+              allergens: allergensFor(item.name),
             },
             status: 'published',
           });
@@ -580,7 +651,47 @@ export default {
         });
         for (const [itemIndex, item] of menu.items.entries()) {
           await strapi.documents('api::menu-item.menu-item').create({
-            data: { name:item.name, price:item.price, description:item.description, tags:item.tags ?? [], sortOrder:itemIndex + 1, category:category.documentId },
+            data: {
+              name:item.name,
+              price:item.price,
+              description:item.description,
+              tags:item.tags ?? [],
+              sortOrder:itemIndex + 1,
+              category:category.documentId,
+              locations:[location.documentId],
+              allergens:allergensFor(item.name),
+            } as any,
+            status: 'published',
+          });
+        }
+      }
+    }
+
+    // Backfill existing seeded items without overwriting allergen/location choices an editor has made.
+    const categoriesForBackfill = await strapi.documents('api::menu-category.menu-category').findMany({
+      limit: 500,
+      populate: {
+        locations: true,
+        items: { populate: { allergens: true, locations: true } },
+      },
+    } as any) as any[];
+    for (const category of categoriesForBackfill) {
+      const categoryLocationIds = Array.isArray(category.locations)
+        ? category.locations.map((location: any) => location.documentId).filter(Boolean)
+        : [];
+      for (const item of Array.isArray(category.items) ? category.items : []) {
+        const updates: Record<string, unknown> = {};
+        const seededAllergens = allergensFor(item.name);
+        if (seededAllergens.length > 0 && (!Array.isArray(item.allergens) || item.allergens.length === 0)) {
+          updates.allergens = seededAllergens;
+        }
+        if (categoryLocationIds.length > 0 && (!Array.isArray(item.locations) || item.locations.length === 0)) {
+          updates.locations = categoryLocationIds;
+        }
+        if (Object.keys(updates).length > 0) {
+          await strapi.documents('api::menu-item.menu-item').update({
+            documentId: item.documentId,
+            data: updates as any,
             status: 'published',
           });
         }

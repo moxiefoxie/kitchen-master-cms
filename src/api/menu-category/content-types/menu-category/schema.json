@@ -4,7 +4,8 @@
   "info": {
     "singularName": "menu-category",
     "pluralName": "menu-categories",
-    "displayName": "Menu Category"
+    "displayName": "Menu Category",
+    "description": "Food, drink, and happy-hour groupings. Filter by Restaurants; an empty Restaurants field applies everywhere."
   },
   "options": { "draftAndPublish": true },
   "attributes": {
@@ -14,6 +15,9 @@
     "note": { "type": "text" },
     "sortOrder": { "type": "integer", "default": 0 },
     "items": { "type": "relation", "relation": "oneToMany", "target": "api::menu-item.menu-item", "mappedBy": "category" },
-    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "mappedBy": "menuCategories" }
+    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "mappedBy": "menuCategories", "description": "Leave empty to show this category at every restaurant." }
+  },
+  "config": {
+    "layouts": { "list": ["name", "menuType", "locations", "sortOrder"] }
   }
 }

@@ -28,5 +28,8 @@
     "dismissalKey": { "type": "string", "description": "Change this value when you want a previously dismissed banner to appear again." },
     "priority": { "type": "integer", "default": 0 },
     "sortOrder": { "type": "integer", "default": 0 }
+  },
+  "config": {
+    "layouts": { "list": ["title", "happeningType", "locations", "enabled"] }
   }
 }

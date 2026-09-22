@@ -17,8 +17,14 @@ export default {
         status,
         sort: ['sortOrder:asc'],
         limit: 100,
-        populate: { items: { sort: ['sortOrder:asc'] }, locations: true },
-      }),
+        populate: {
+          items: {
+            sort: ['sortOrder:asc'],
+            populate: { allergens: { sort: ['sortOrder:asc'] }, locations: true },
+          },
+          locations: true,
+        },
+      } as any),
       strapi.documents('api::site-page.site-page').findMany({
         status,
         sort: ['sortOrder:asc'],

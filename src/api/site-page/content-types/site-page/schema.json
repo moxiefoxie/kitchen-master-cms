@@ -12,7 +12,7 @@
     "title": { "type": "string", "required": true },
     "slug": { "type": "uid", "targetField": "title", "required": true },
     "pageType": { "type": "enumeration", "enum": ["home", "story", "private-dining", "contact", "careers", "franchise", "happenings", "specials", "custom"], "required": true },
-    "location": { "type": "relation", "relation": "manyToOne", "target": "api::location.location" },
+    "location": { "type": "relation", "relation": "manyToOne", "target": "api::location.location", "description": "Leave empty for the all-restaurants version of this page; select a restaurant for a location-specific version." },
     "heroEyebrow": { "type": "string" },
     "heroTitle": { "type": "string" },
     "heroAccent": { "type": "string" },
@@ -28,5 +28,8 @@
     "noIndex": { "type": "boolean", "default": false },
     "structuredData": { "type": "json" },
     "sortOrder": { "type": "integer", "default": 0 }
+  },
+  "config": {
+    "layouts": { "list": ["title", "pageType", "location", "sortOrder"] }
   }
 }
