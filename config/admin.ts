@@ -1,6 +1,16 @@
 import type { Core } from '@strapi/strapi';
 
-const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Admin => ({
+const DEPLOYED_FRONTEND_URL = 'https://kitchen-master-two.vercel.app';
+
+const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Admin => {
+  const production = env('NODE_ENV') === 'production';
+  const fallbackFrontendUrl = production ? DEPLOYED_FRONTEND_URL : 'http://localhost:3000';
+  const configuredFrontendUrl = env('FRONTEND_URL', fallbackFrontendUrl).replace(/\/$/, '');
+  const frontendUrl = production && /^https?:\/\/[^/]+\.strapiapp\.com$/i.test(configuredFrontendUrl)
+    ? DEPLOYED_FRONTEND_URL
+    : configuredFrontendUrl;
+
+  return ({
   auth: {
     secret: env('ADMIN_JWT_SECRET')!,
   },
@@ -23,7 +33,7 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Admin => 
   preview: {
     enabled: true,
     config: {
-      allowedOrigins: [env('FRONTEND_URL', 'http://localhost:3000')],
+      allowedOrigins: [frontendUrl],
       handler(uid, { documentId, status }) {
         const supported = [
           'api::location.location',
@@ -33,7 +43,7 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Admin => 
           'api::site-setting.site-setting',
         ];
         if (!supported.includes(uid)) return null;
-        const url = new URL(env('FRONTEND_URL', 'http://localhost:3000'));
+        const url = new URL(frontendUrl);
         if (uid === 'api::site-page.site-page') url.pathname = `/pages/${documentId}`;
         url.searchParams.set('preview', '1');
         url.searchParams.set('contentType', uid);
@@ -43,6 +53,7 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Admin => 
       },
     },
   },
-});
+  });
+};
 
 export default config;
