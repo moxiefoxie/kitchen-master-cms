@@ -8,6 +8,15 @@ const LEGACY_CONTACT_EMAIL = 'Management@kitchenmasterga.com';
 const DEFAULT_HIRING_ROLES = [
   'Front of house', 'Server', 'Bartender', 'Host', 'Kitchen', 'Sushi chef', 'Management', 'Other',
 ];
+const SEED_MEDIA_FILES: Record<string, string> = {
+  'hero.png': 'hero_d0cafda107.png',
+  'soup-dumplings.png': 'soup_dumplings_835fe4bef2.png',
+  'lamb-chop.png': 'lamb_chop_14e3c3c255.png',
+  'szechuan-wonton.png': 'szechuan_wonton_27b34f1558.png',
+  'spread.jpg': 'spread_5dd17df619.jpg',
+  'private-room.png': 'private_room_f2c790f7b8.png',
+  'dining.png': 'dining_34d0d5c0f1.png',
+};
 
 const locations = [
   {
@@ -67,7 +76,7 @@ const locations = [
 type SeedPage = {
   title: string;
   slug: string;
-  pageType: 'home' | 'private-dining' | 'contact' | 'careers' | 'franchise' | 'happenings';
+  pageType: 'home' | 'private-dining' | 'contact' | 'careers' | 'franchise' | 'happenings' | 'specials';
   heroEyebrow?: string;
   heroTitle: string;
   heroAccent: string;
@@ -80,14 +89,13 @@ type SeedPage = {
 const sitePages: SeedPage[] = [
   { title: 'Home', slug: 'home', pageType: 'home', heroTitle: 'Tradition,', heroAccent: 'mastered.', heroDescription: 'Soup dumplings, fresh sushi, and bold modern plates—crafted daily at Kitchen Master.', sortOrder: 1 },
   { title: 'Happenings', slug: 'happenings', pageType: 'happenings', heroEyebrow: 'Specials · Events', heroTitle: 'What’s happening', heroAccent: 'at Kitchen Master.', heroDescription: 'Seasonal specials, happy hour notes, and gatherings worth putting on your calendar.', sortOrder: 2 },
+  { title: 'Specials', slug: 'specials', pageType: 'specials', heroEyebrow: 'Happenings · Specials', heroTitle: 'From the kitchen', heroAccent: 'right now.', heroDescription: 'Limited dishes and seasonal ideas from your selected Kitchen Master.', sortOrder: 3 },
   { title: 'Private Dining', slug: 'private-dining', pageType: 'private-dining', heroEyebrow: 'Private dining', heroTitle: 'Your occasion.', heroAccent: 'Our craft.', heroDescription: 'From milestone dinners to company gatherings, our team will help shape a generous, memorable experience around your guests.', sections: [
     { eyebrow:'Made for gathering',heading:'A table that feels like yours.',body:'Tell us what you are celebrating, how many guests you expect, and the atmosphere you have in mind. Our restaurant team will follow up about availability, room options, menus, and minimums.' },
     { eyebrow:'Thoughtfully hosted',heading:'Dinner, with every detail considered.',body:'Private dining options vary by restaurant. We can help with family-style menus, business dinners, birthdays, receptions, and other group occasions.' },
   ], formConfig: { formEyebrow:'Event inquiry', formTitle:'Plan with {{location}}.', formDescription:'Required fields help us route your message to the right team.', submitLabel:'Request event details', eventTypeOptions:['Birthday','Wedding or rehearsal dinner','Corporate event','Family gathering','Reception','Other'] }, sortOrder: 3 },
-  { title: 'Contact', slug: 'contact', pageType: 'contact', heroEyebrow: 'Contact us', heroTitle: 'We’re here to', heroAccent: 'help.', heroDescription: 'Questions about a visit, feedback for our team, or help with an order? Send a note directly to your Kitchen Master location.', sections: [
-    { eyebrow:'Your neighborhood team',heading:'Let’s start a conversation.',body:'Choose the restaurant your message is about and share as much detail as you can. The location team will review your note and respond as soon as possible.' },
-  ], formConfig: { formEyebrow:'Send a note', formTitle:'Contact {{location}}.', formDescription:'Required fields help us route your message to the right team.', submitLabel:'Send message', subjectOptions:['General question','Order support','Feedback about a visit','Press or partnership','Other'] }, sortOrder: 4 },
-  { title: 'Careers', slug: 'careers', pageType: 'careers', heroTitle: 'Master your', heroAccent: 'craft.', heroDescription: 'Build your hospitality career with Kitchen Master.', sortOrder: 5 },
+  { title: 'Contact', slug: 'contact', pageType: 'contact', heroEyebrow: 'Contact us', heroTitle: 'We’re here to', heroAccent: 'help.', heroDescription: 'Questions about a visit, feedback for our team, or help with an order? Send a note directly to your Kitchen Master location.', sections: [], formConfig: { formEyebrow:'Send a note', formTitle:'Contact {{location}}.', formDescription:'Required fields help us route your message to the right team.', submitLabel:'Send message', subjectOptions:['General question','Order support','Feedback about a visit','Press or partnership','Other'] }, sortOrder: 4 },
+  { title: 'Careers', slug: 'careers', pageType: 'careers', heroTitle: 'Master your', heroAccent: 'craft.', heroDescription: 'Build your hospitality career with Kitchen Master.', formConfig: { formEyebrow:'Join the team', formTitle:'Apply to {{location}}.', formDescription:'Choose your restaurant and tell us where you shine.', submitLabel:'Submit application' }, sortOrder: 5 },
   { title: 'Franchise Opportunities', slug: 'franchise', pageType: 'franchise', heroEyebrow: 'Franchise opportunities', heroTitle: 'Grow with', heroAccent: 'Kitchen Master.', heroDescription: 'We are exploring thoughtful growth with experienced operators who value hospitality, consistency, and craft.', sections: [
     { eyebrow:'The right partnership',heading:'Built for hands-on operators.',body:'We are interested in partners who understand their market, care deeply about guest experience, and are ready to protect the standards behind every Kitchen Master meal.' },
     { eyebrow:'Start the conversation',heading:'Tell us where you want to grow.',body:'Share your target market, operating background, and investment readiness. Submitting an inquiry does not guarantee territory availability or approval; our team will follow up when there may be a fit.' },
@@ -114,7 +122,10 @@ export default {
     async function cmsImage(fileName: string) {
       const existing = await strapi.db.query('plugin::upload.file').findOne({ where: { name: fileName } });
       if (existing) return existing.id;
-      const path = resolve(process.cwd(), '..', 'public', 'images', fileName);
+      const bundledName = SEED_MEDIA_FILES[fileName];
+      const bundledPath = bundledName ? resolve(process.cwd(), 'public', 'uploads', bundledName) : '';
+      const workspacePath = resolve(process.cwd(), '..', 'public', 'images', fileName);
+      const path = bundledPath && existsSync(bundledPath) ? bundledPath : workspacePath;
       if (!existsSync(path)) return null;
       const type = fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') ? 'image/jpeg' : 'image/png';
       const uploaded = await strapi.plugin('upload').service('upload').upload({
@@ -309,10 +320,11 @@ export default {
       }
     }
 
-    for (const page of sitePages.filter((entry) => ['private-dining', 'contact', 'franchise'].includes(entry.slug))) {
+    for (const page of sitePages.filter((entry) => ['private-dining', 'contact', 'franchise', 'careers'].includes(entry.slug))) {
       const existing = await strapi.documents('api::site-page.site-page').findFirst({ filters: { slug: page.slug } });
       const hasFormConfig = existing?.formConfig && typeof existing.formConfig === 'object' && !Array.isArray(existing.formConfig) && Object.keys(existing.formConfig).length > 0;
-      if (existing && ((!Array.isArray(existing.sections) || existing.sections.length === 0) || !hasFormConfig)) {
+      const needsSeedSections = Boolean(page.sections?.length) && (!Array.isArray(existing?.sections) || existing.sections.length === 0);
+      if (existing && (needsSeedSections || !hasFormConfig)) {
         await strapi.documents('api::site-page.site-page').update({
           documentId: existing.documentId,
           data: {
@@ -326,6 +338,19 @@ export default {
           status: 'published',
         });
       }
+    }
+
+    const contactPage = await strapi.documents('api::site-page.site-page').findFirst({ filters: { slug: 'contact' } });
+    const contactHasLegacyBlurb = Array.isArray(contactPage?.sections) && contactPage.sections.some((section: any) =>
+      section?.heading === 'Let’s start a conversation.'
+    );
+    if (contactPage && contactHasLegacyBlurb) {
+      const seed = sitePages.find((page) => page.slug === 'contact')!;
+      await strapi.documents('api::site-page.site-page').update({
+        documentId: contactPage.documentId,
+        data: { sections: [], heroDescription: seed.heroDescription, formConfig: seed.formConfig as any },
+        status: 'published',
+      });
     }
 
     const storySection = await strapi.documents('api::homepage-section.homepage-section').findFirst({ filters: { sectionKey: 'story' } });
@@ -358,13 +383,47 @@ export default {
 
     const supplementalHomepageSections = [
       { name:'Reservations',sectionKey:'reservations',eyebrow:'Reservations',title:'Your table in',accent:'{{location}}.',body:'Choose a date and party size here, then view live times and complete your reservation securely with our reservation partner.',sortOrder:2 },
-      { name:'Happy Hour',sectionKey:'happy-hour',eyebrow:'A little earlier',title:'Happy hour.',accent:'Well spent.',body:'Selected bites and pours at participating Kitchen Master restaurants. Times and availability vary by location.',items:['Dine-in only','Participation, days, and times vary by location','Must be 21+ for alcoholic beverages'],sortOrder:6 },
+      { name:'Happy Hour',sectionKey:'happy-hour',eyebrow:'A little earlier',title:'Happy hour.',accent:'Well spent.',body:'Monday–Friday · 3–5 PM. A short list of favorite bites and pours for {{location}}.',items:['Dine-in only','Happy hour menu and hours are set by location','Must be 21+ for alcoholic beverages'],sortOrder:6 },
       { name:'Social Proof',sectionKey:'social-proof',eyebrow:'From our guests',title:'Loved locally.',accent:'Shared often.',body:'See what guests are saying about Kitchen Master {{location}}, then follow along for new dishes and behind-the-scenes moments.',sortOrder:8 },
       { name:'Locations',sectionKey:'locations',eyebrow:'Our restaurants',title:'Find your',accent:'Kitchen Master.',body:'Explore every Kitchen Master location and choose the restaurant you’d like to visit.',sortOrder:9 },
     ];
     for (const section of supplementalHomepageSections) {
       const existing = await strapi.documents('api::homepage-section.homepage-section').findFirst({ filters: { sectionKey: section.sectionKey as any } });
       if (!existing) await strapi.documents('api::homepage-section.homepage-section').create({ data: section as any, status:'published' });
+    }
+    const globalHappyHour = await strapi.documents('api::homepage-section.homepage-section').findFirst({ filters: { sectionKey: 'happy-hour', location: { id: { $null: true } } } as any });
+    if (globalHappyHour?.body === 'Selected bites and pours at participating Kitchen Master restaurants. Times and availability vary by location.') {
+      await strapi.documents('api::homepage-section.homepage-section').update({
+        documentId: globalHappyHour.documentId,
+        data: {
+          body:'Monday–Friday · 3–5 PM. A short list of favorite bites and pours for {{location}}.',
+          items:['Dine-in only','Happy hour menu and hours are set by location','Must be 21+ for alcoholic beverages'],
+        },
+        status:'published',
+      });
+    }
+    for (const locationSlug of ['suwanee', 'frisco', 'southlake']) {
+      const location = await strapi.documents('api::location.location').findFirst({ filters: { slug: locationSlug } });
+      if (!location) continue;
+      const existing = await strapi.documents('api::homepage-section.homepage-section').findFirst({
+        filters: { sectionKey: 'happy-hour', location: { slug: locationSlug } } as any,
+      });
+      if (!existing) {
+        await strapi.documents('api::homepage-section.homepage-section').create({
+          data: {
+            name:`Happy Hour · ${location.name}`,
+            sectionKey:'happy-hour',
+            location:location.documentId,
+            eyebrow:'A little earlier',
+            title:'Happy hour.',
+            accent:'Well spent.',
+            body:'Monday–Friday · 3–5 PM. A short list of favorite bites and pours for {{location}}.',
+            items:['Dine-in only','Happy hour menu and hours are set by location','Must be 21+ for alcoholic beverages'],
+            sortOrder:6,
+          } as any,
+          status:'published',
+        });
+      }
     }
     const connectSection = await strapi.documents('api::homepage-section.homepage-section').findFirst({ filters: { sectionKey: 'connect' } });
     if (connectSection && (!Array.isArray(connectSection.items) || connectSection.items.length === 0)) {
@@ -378,6 +437,75 @@ export default {
         ] },
         status:'published',
       });
+    }
+
+    const mediaEntries = await Promise.all(Object.keys(SEED_MEDIA_FILES).map(async (fileName) => [fileName, await cmsImage(fileName)] as const));
+    const media = Object.fromEntries(mediaEntries) as Record<string, number | null>;
+    const defaultHero = media['hero.png'];
+    const diningImage = media['dining.png'];
+
+    if (defaultHero) {
+      for (const locationSeed of locations) {
+        const location = await strapi.documents('api::location.location').findFirst({
+          filters: { slug: locationSeed.slug },
+          populate: ['heroImage', 'gallery'],
+        });
+        if (!location) continue;
+        const updates: Record<string, unknown> = {};
+        if (!location.heroImage) updates.heroImage = defaultHero;
+        if (!Array.isArray(location.gallery) || location.gallery.length === 0) {
+          updates.gallery = [diningImage, media['spread.jpg'], media['private-room.png']].filter(Boolean);
+        }
+        if (Object.keys(updates).length > 0) {
+          await strapi.documents('api::location.location').update({
+            documentId: location.documentId,
+            data: updates as any,
+            status: 'published',
+          });
+        }
+      }
+
+      for (const pageSeed of sitePages) {
+        const page = await strapi.documents('api::site-page.site-page').findFirst({
+          filters: { slug: pageSeed.slug },
+          populate: ['heroImage'],
+        });
+        if (page && !page.heroImage) {
+          await strapi.documents('api::site-page.site-page').update({
+            documentId: page.documentId,
+            data: { heroImage: pageSeed.slug === 'home' ? defaultHero : (diningImage ?? defaultHero) },
+            status: 'published',
+          });
+        }
+      }
+    }
+
+    const sectionMedia: Record<string, { image?: number | null; images?: Array<number | null> }> = {
+      'location-gateway': { image: defaultHero },
+      'story': { image: diningImage },
+      'featured-menu': { images: [media['soup-dumplings.png'], media['lamb-chop.png'], media['szechuan-wonton.png']] },
+      'dining-feature': { image: media['spread.jpg'] },
+      'private-dining': { image: media['private-room.png'] },
+    };
+    for (const [sectionKey, desired] of Object.entries(sectionMedia)) {
+      const sections = await strapi.documents('api::homepage-section.homepage-section').findMany({
+        filters: { sectionKey: sectionKey as any },
+        populate: ['image', 'images'],
+        limit: 100,
+      });
+      for (const section of sections) {
+        const updates: Record<string, unknown> = {};
+        if (desired.image && !section.image) updates.image = desired.image;
+        const desiredImages = desired.images?.filter(Boolean) as number[] | undefined;
+        if (desiredImages?.length && (!Array.isArray(section.images) || section.images.length === 0)) updates.images = desiredImages;
+        if (Object.keys(updates).length > 0) {
+          await strapi.documents('api::homepage-section.homepage-section').update({
+            documentId: section.documentId,
+            data: updates as any,
+            status: 'published',
+          });
+        }
+      }
     }
 
     const existingCategories = await strapi.documents('api::menu-category.menu-category').findMany({ limit: 1 });
@@ -415,19 +543,44 @@ export default {
       }
     }
 
+    const happyHourLocations = (await Promise.all(['suwanee', 'frisco', 'southlake'].map((slug) =>
+      strapi.documents('api::location.location').findFirst({ filters: { slug } })
+    ))).filter(Boolean) as Array<{ documentId: string; slug: string; name: string }>;
     for (const [categoryIndex, menu] of HAPPY_HOUR_CATEGORIES.entries()) {
-      const slug = `happy-hour-${menu.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
-      const existing = await strapi.documents('api::menu-category.menu-category').findFirst({ filters: { slug } });
-      if (existing) continue;
-      const category = await strapi.documents('api::menu-category.menu-category').create({
-        data: { name: menu.name, slug, menuType: 'happy-hour', note: menu.note, sortOrder: 100 + categoryIndex },
-        status: 'published',
-      });
-      for (const [itemIndex, item] of menu.items.entries()) {
-        await strapi.documents('api::menu-item.menu-item').create({
-          data: { name:item.name, price:item.price, description:item.description, tags:item.tags ?? [], sortOrder:itemIndex + 1, category:category.documentId },
+      const categorySlug = menu.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      for (const [locationIndex, location] of happyHourLocations.entries()) {
+        const slug = location.slug === 'suwanee' ? `happy-hour-${categorySlug}` : `happy-hour-${categorySlug}-${location.slug}`;
+        const existing = await strapi.documents('api::menu-category.menu-category').findFirst({
+          filters: { slug },
+          populate: ['locations'],
+        });
+        if (existing) {
+          if (!Array.isArray(existing.locations) || existing.locations.length === 0) {
+            await strapi.documents('api::menu-category.menu-category').update({
+              documentId: existing.documentId,
+              data: { locations: [location.documentId] } as any,
+              status: 'published',
+            });
+          }
+          continue;
+        }
+        const category = await strapi.documents('api::menu-category.menu-category').create({
+          data: {
+            name: menu.name,
+            slug,
+            menuType: 'happy-hour',
+            note: menu.note,
+            locations: [location.documentId],
+            sortOrder: 100 + (locationIndex * 10) + categoryIndex,
+          } as any,
           status: 'published',
         });
+        for (const [itemIndex, item] of menu.items.entries()) {
+          await strapi.documents('api::menu-item.menu-item').create({
+            data: { name:item.name, price:item.price, description:item.description, tags:item.tags ?? [], sortOrder:itemIndex + 1, category:category.documentId },
+            status: 'published',
+          });
+        }
       }
     }
 
@@ -441,6 +594,47 @@ export default {
         },
         status: 'published',
       });
+    }
+    const suwanee = await strapi.documents('api::location.location').findFirst({ filters: { slug: 'suwanee' } });
+    const suwaneeSpecials = [
+      {
+        title:'Roasted Konbu and Black Sesame Salmon Carpaccio',
+        slug:'roasted-konbu-black-sesame-salmon-carpaccio',
+        eyebrow:'Suwanee weekly special',
+        summary:'Fresh salmon, thinly sliced and finished with roasted konbu and black sesame.',
+        details:'A clean, umami-forward starter with subtle nuttiness, designed as a light first course or shared plate.',
+        sortOrder:10,
+      },
+      {
+        title:'Whole Grilled Yuzu-Ponzu Branzino with Lemongrass Oil',
+        slug:'whole-grilled-yuzu-ponzu-branzino',
+        eyebrow:'Suwanee weekly special',
+        summary:'Whole grilled branzino glazed with yuzu-ponzu and finished with fragrant lemongrass oil.',
+        details:'Bright citrus and aromatic lemongrass balance the richness of the fish for a centerpiece-worthy main.',
+        sortOrder:20,
+      },
+    ];
+    if (suwanee) {
+      for (const special of suwaneeSpecials) {
+        const existing = await strapi.documents('api::happening.happening').findFirst({ filters: { slug: special.slug } });
+        if (!existing) {
+          await strapi.documents('api::happening.happening').create({
+            data: {
+              ...special,
+              happeningType:'special',
+              enabled:true,
+              featured:true,
+              schedule:'Available now',
+              locations:[suwanee.documentId],
+              buttonLabel:'View weekly specials',
+              buttonUrl:'https://www.kitchenmasterga.com/weekly-specials-suwanee-ga',
+              showInBanner:false,
+              priority:50,
+            } as any,
+            status:'published',
+          });
+        }
+      }
     }
   },
 };

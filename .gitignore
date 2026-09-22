@@ -82,6 +82,13 @@ ssl
 nbproject
 public/uploads/*
 !public/uploads/.gitkeep
+!public/uploads/hero_d0cafda107.png
+!public/uploads/soup_dumplings_835fe4bef2.png
+!public/uploads/lamb_chop_14e3c3c255.png
+!public/uploads/szechuan_wonton_27b34f1558.png
+!public/uploads/spread_5dd17df619.jpg
+!public/uploads/private_room_f2c790f7b8.png
+!public/uploads/dining_34d0d5c0f1.png
 .tsbuildinfo
 .eslintcache
 

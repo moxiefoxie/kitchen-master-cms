@@ -806,6 +806,7 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
         'careers',
         'franchise',
         'happenings',
+        'specials',
         'custom',
       ]
     > &
