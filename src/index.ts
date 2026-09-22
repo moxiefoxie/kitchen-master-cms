@@ -67,7 +67,7 @@ const locations = [
 type SeedPage = {
   title: string;
   slug: string;
-  pageType: 'home' | 'private-dining' | 'contact' | 'careers' | 'franchise';
+  pageType: 'home' | 'private-dining' | 'contact' | 'careers' | 'franchise' | 'happenings';
   heroEyebrow?: string;
   heroTitle: string;
   heroAccent: string;
@@ -79,6 +79,7 @@ type SeedPage = {
 
 const sitePages: SeedPage[] = [
   { title: 'Home', slug: 'home', pageType: 'home', heroTitle: 'Tradition,', heroAccent: 'mastered.', heroDescription: 'Soup dumplings, fresh sushi, and bold modern plates—crafted daily at Kitchen Master.', sortOrder: 1 },
+  { title: 'Happenings', slug: 'happenings', pageType: 'happenings', heroEyebrow: 'Specials · Events', heroTitle: 'What’s happening', heroAccent: 'at Kitchen Master.', heroDescription: 'Seasonal specials, happy hour notes, and gatherings worth putting on your calendar.', sortOrder: 2 },
   { title: 'Private Dining', slug: 'private-dining', pageType: 'private-dining', heroEyebrow: 'Private dining', heroTitle: 'Your occasion.', heroAccent: 'Our craft.', heroDescription: 'From milestone dinners to company gatherings, our team will help shape a generous, memorable experience around your guests.', sections: [
     { eyebrow:'Made for gathering',heading:'A table that feels like yours.',body:'Tell us what you are celebrating, how many guests you expect, and the atmosphere you have in mind. Our restaurant team will follow up about availability, room options, menus, and minimums.' },
     { eyebrow:'Thoughtfully hosted',heading:'Dinner, with every detail considered.',body:'Private dining options vary by restaurant. We can help with family-style menus, business dinners, birthdays, receptions, and other group occasions.' },
@@ -292,6 +293,22 @@ export default {
       }
     }
 
+    for (const page of sitePages) {
+      const existing = await strapi.documents('api::site-page.site-page').findFirst({ filters: { slug: page.slug } });
+      if (!existing) {
+        await strapi.documents('api::site-page.site-page').create({
+          data: {
+            ...page,
+            sections: 'sections' in page ? page.sections : [],
+            formConfig: (page.formConfig ?? {}) as any,
+            seoTitle: `${page.title} | Kitchen Master`,
+            seoDescription: page.heroDescription,
+          },
+          status: 'published',
+        });
+      }
+    }
+
     for (const page of sitePages.filter((entry) => ['private-dining', 'contact', 'franchise'].includes(entry.slug))) {
       const existing = await strapi.documents('api::site-page.site-page').findFirst({ filters: { slug: page.slug } });
       const hasFormConfig = existing?.formConfig && typeof existing.formConfig === 'object' && !Array.isArray(existing.formConfig) && Object.keys(existing.formConfig).length > 0;
@@ -341,6 +358,7 @@ export default {
 
     const supplementalHomepageSections = [
       { name:'Reservations',sectionKey:'reservations',eyebrow:'Reservations',title:'Your table in',accent:'{{location}}.',body:'Choose a date and party size here, then view live times and complete your reservation securely with our reservation partner.',sortOrder:2 },
+      { name:'Happy Hour',sectionKey:'happy-hour',eyebrow:'A little earlier',title:'Happy hour.',accent:'Well spent.',body:'Selected bites and pours at participating Kitchen Master restaurants. Times and availability vary by location.',items:['Dine-in only','Participation, days, and times vary by location','Must be 21+ for alcoholic beverages'],sortOrder:6 },
       { name:'Social Proof',sectionKey:'social-proof',eyebrow:'From our guests',title:'Loved locally.',accent:'Shared often.',body:'See what guests are saying about Kitchen Master {{location}}, then follow along for new dishes and behind-the-scenes moments.',sortOrder:8 },
       { name:'Locations',sectionKey:'locations',eyebrow:'Our restaurants',title:'Find your',accent:'Kitchen Master.',body:'Explore every Kitchen Master location and choose the restaurant you’d like to visit.',sortOrder:9 },
     ];
@@ -395,6 +413,18 @@ export default {
           });
         }
       }
+    }
+
+    const existingHappenings = await strapi.documents('api::happening.happening').findMany({ limit: 1 });
+    if (existingHappenings.length === 0) {
+      await strapi.documents('api::happening.happening').create({
+        data: {
+          title: 'Sample announcement — edit or replace', slug: 'sample-announcement', happeningType: 'event', enabled: false,
+          featured: false, eyebrow: 'Happenings', summary: 'Add a concise special or event summary here.', details: 'This disabled sample shows the fields available for the Happenings page and announcement bar.',
+          buttonLabel: 'See what’s happening', buttonUrl: '/pages/happenings', showInBanner: true, dismissalKey: 'sample-announcement-v1', priority: 0, sortOrder: 1,
+        },
+        status: 'published',
+      });
     }
   },
 };

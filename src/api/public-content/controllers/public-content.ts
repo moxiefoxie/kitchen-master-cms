@@ -5,7 +5,7 @@ export default {
     const requestedPreview = ctx.query.preview === '1';
     const validPreview = requestedPreview && ctx.query.previewSecret === process.env.PREVIEW_SECRET;
     const status = validPreview ? 'draft' : 'published';
-    const [locations, settings, menuCategories, pages, homepageSections, campaigns] = await Promise.all([
+    const [locations, settings, menuCategories, pages, homepageSections, campaigns, happenings] = await Promise.all([
       strapi.documents('api::location.location').findMany({
         status,
         sort: ['sortOrder:asc'],
@@ -27,8 +27,9 @@ export default {
       }),
       strapi.documents('api::homepage-section.homepage-section').findMany({ status, sort: ['sortOrder:asc'], limit: 100, populate: ['location', 'image', 'images'] }),
       strapi.documents('api::campaign.campaign').findMany({ status, sort: ['priority:desc'], limit: 100, populate: ['locations', 'image'] }),
+      strapi.documents('api::happening.happening').findMany({ status, sort: ['featured:desc', 'priority:desc', 'sortOrder:asc'], limit: 100, populate: ['locations', 'image'] }),
     ]);
 
-    ctx.body = { locations, settings, menuCategories, pages, homepageSections, campaigns, preview: validPreview };
+    ctx.body = { locations, settings, menuCategories, pages, homepageSections, campaigns, happenings, preview: validPreview };
   },
 };

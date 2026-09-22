@@ -5,7 +5,7 @@
   "options": { "draftAndPublish": true },
   "attributes": {
     "name": { "type": "string", "required": true },
-    "sectionKey": { "type": "enumeration", "enum": ["location-gateway", "reservations", "story", "featured-menu", "food-menu", "drinks", "dining-feature", "private-dining", "social-proof", "locations", "connect", "footer"], "required": true },
+    "sectionKey": { "type": "enumeration", "enum": ["location-gateway", "reservations", "story", "featured-menu", "food-menu", "drinks", "happy-hour", "dining-feature", "private-dining", "social-proof", "locations", "connect", "footer"], "required": true },
     "location": { "type": "relation", "relation": "manyToOne", "target": "api::location.location", "description": "Optional. When set, this section overrides the global section with the same key for this location." },
     "eyebrow": { "type": "string" },
     "title": { "type": "string" },

@@ -504,6 +504,60 @@ export interface ApiCampaignCampaign extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiHappeningHappening extends Struct.CollectionTypeSchema {
+  collectionName: 'happenings';
+  info: {
+    description: 'Location-aware specials, events, and optional dismissible header announcements. Leave Locations empty to show at every restaurant.';
+    displayName: 'Happening';
+    pluralName: 'happenings';
+    singularName: 'happening';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    buttonLabel: Schema.Attribute.String;
+    buttonUrl: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    details: Schema.Attribute.Text;
+    dismissalKey: Schema.Attribute.String;
+    enabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    endsAt: Schema.Attribute.DateTime;
+    eyebrow: Schema.Attribute.String;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    happeningType: Schema.Attribute.Enumeration<['event', 'special']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'event'>;
+    image: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::happening.happening'
+    > &
+      Schema.Attribute.Private;
+    locations: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::location.location'
+    >;
+    priority: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    schedule: Schema.Attribute.String;
+    showInBanner: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    startsAt: Schema.Attribute.DateTime;
+    summary: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiHomepageSectionHomepageSection
   extends Struct.CollectionTypeSchema {
   collectionName: 'homepage_sections';
@@ -546,6 +600,7 @@ export interface ApiHomepageSectionHomepageSection
         'featured-menu',
         'food-menu',
         'drinks',
+        'happy-hour',
         'dining-feature',
         'private-dining',
         'social-proof',
@@ -663,7 +718,7 @@ export interface ApiMenuCategoryMenuCategory
       'manyToMany',
       'api::location.location'
     >;
-    menuType: Schema.Attribute.Enumeration<['food', 'drink']> &
+    menuType: Schema.Attribute.Enumeration<['food', 'drink', 'happy-hour']> &
       Schema.Attribute.Required;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     note: Schema.Attribute.Text;
@@ -750,6 +805,7 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
         'contact',
         'careers',
         'franchise',
+        'happenings',
         'custom',
       ]
     > &
@@ -1319,6 +1375,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::campaign.campaign': ApiCampaignCampaign;
+      'api::happening.happening': ApiHappeningHappening;
       'api::homepage-section.homepage-section': ApiHomepageSectionHomepageSection;
       'api::location.location': ApiLocationLocation;
       'api::menu-category.menu-category': ApiMenuCategoryMenuCategory;
