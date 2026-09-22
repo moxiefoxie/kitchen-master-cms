@@ -4,7 +4,7 @@
   "private": true,
   "description": "A Strapi application",
   "scripts": {
-    "prebuild": "apiUrl=http://localhost:1337 apiToken=bypass_string strapi ts:generate-types",
+    "prebuild": "apiUrl=http://localhost:1337 apiToken=bypass API_URL=http://localhost:1337 API_TOKEN=bypass STRAPI_API_URL=http://localhost:1337 STRAPI_API_TOKEN=bypass strapi ts:generate-types",
     "build": "apiUrl=http://localhost:1337 apiToken=bypass_string strapi build",
     "console": "strapi console",
     "deploy": "strapi deploy",
