@@ -443,6 +443,47 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAllergenAllergen extends Struct.CollectionTypeSchema {
+  collectionName: 'allergens';
+  info: {
+    description: 'Reusable allergen options selected on menu items';
+    displayName: 'Allergen';
+    pluralName: 'allergens';
+    singularName: 'allergen';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    items: Schema.Attribute.Relation<'manyToMany', 'api::menu-item.menu-item'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::allergen.allergen'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    publishedAt: Schema.Attribute.DateTime;
+    shortLabel: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 3;
+      }>;
+    slug: Schema.Attribute.UID<'name'> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCampaignCampaign extends Struct.CollectionTypeSchema {
   collectionName: 'campaigns';
   info: {
@@ -496,6 +537,11 @@ export interface ApiCampaignCampaign extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String & Schema.Attribute.Required;
     priority: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     publishedAt: Schema.Attribute.DateTime;
+    restaurantScope: Schema.Attribute.Enumeration<
+      ['all', 'suwanee', 'frisco', 'southlake', 'midtown', 'multiple']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'all'>;
     startsAt: Schema.Attribute.DateTime;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -507,7 +553,7 @@ export interface ApiCampaignCampaign extends Struct.CollectionTypeSchema {
 export interface ApiHappeningHappening extends Struct.CollectionTypeSchema {
   collectionName: 'happenings';
   info: {
-    description: 'Location-aware specials, events, and optional dismissible header announcements. Leave Locations empty to show at every restaurant.';
+    description: 'Location-aware specials, events, and optional dismissible header announcements. Use the Restaurant dropdown to control and filter visibility.';
     displayName: 'Happening';
     pluralName: 'happenings';
     singularName: 'happening';
@@ -545,6 +591,11 @@ export interface ApiHappeningHappening extends Struct.CollectionTypeSchema {
     >;
     priority: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     publishedAt: Schema.Attribute.DateTime;
+    restaurantScope: Schema.Attribute.Enumeration<
+      ['all', 'suwanee', 'frisco', 'southlake', 'midtown', 'multiple']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'all'>;
     schedule: Schema.Attribute.String;
     showInBanner: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
@@ -562,7 +613,7 @@ export interface ApiHomepageSectionHomepageSection
   extends Struct.CollectionTypeSchema {
   collectionName: 'homepage_sections';
   info: {
-    description: 'Editable homepage sections. Leave Location empty for the global default, or assign one to override that section for a restaurant.';
+    description: 'Editable homepage sections. Use the Restaurant dropdown for a shared section or a restaurant-specific override.';
     displayName: 'Homepage Section';
     pluralName: 'homepage-sections';
     singularName: 'homepage-section';
@@ -592,6 +643,11 @@ export interface ApiHomepageSectionHomepageSection
     location: Schema.Attribute.Relation<'manyToOne', 'api::location.location'>;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
+    restaurantScope: Schema.Attribute.Enumeration<
+      ['all', 'suwanee', 'frisco', 'southlake', 'midtown']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'all'>;
     sectionKey: Schema.Attribute.Enumeration<
       [
         'location-gateway',
@@ -696,6 +752,7 @@ export interface ApiMenuCategoryMenuCategory
   extends Struct.CollectionTypeSchema {
   collectionName: 'menu_categories';
   info: {
+    description: 'Food, drink, and happy-hour groupings. Use the Restaurant dropdown to control and filter where each category appears.';
     displayName: 'Menu Category';
     pluralName: 'menu-categories';
     singularName: 'menu-category';
@@ -723,6 +780,11 @@ export interface ApiMenuCategoryMenuCategory
     name: Schema.Attribute.String & Schema.Attribute.Required;
     note: Schema.Attribute.Text;
     publishedAt: Schema.Attribute.DateTime;
+    restaurantScope: Schema.Attribute.Enumeration<
+      ['all', 'suwanee', 'frisco', 'southlake', 'midtown', 'multiple']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'all'>;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     updatedAt: Schema.Attribute.DateTime;
@@ -734,6 +796,7 @@ export interface ApiMenuCategoryMenuCategory
 export interface ApiMenuItemMenuItem extends Struct.CollectionTypeSchema {
   collectionName: 'menu_items';
   info: {
+    description: 'Food, drink, and happy-hour items. Use the Restaurant dropdown to control and filter where each item appears.';
     displayName: 'Menu Item';
     pluralName: 'menu-items';
     singularName: 'menu-item';
@@ -742,6 +805,10 @@ export interface ApiMenuItemMenuItem extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    allergens: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::allergen.allergen'
+    >;
     category: Schema.Attribute.Relation<
       'manyToOne',
       'api::menu-category.menu-category'
@@ -756,9 +823,18 @@ export interface ApiMenuItemMenuItem extends Struct.CollectionTypeSchema {
       'api::menu-item.menu-item'
     > &
       Schema.Attribute.Private;
+    locations: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::location.location'
+    >;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     price: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
+    restaurantScope: Schema.Attribute.Enumeration<
+      ['all', 'suwanee', 'frisco', 'southlake', 'midtown', 'multiple']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'all'>;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     tags: Schema.Attribute.JSON;
     updatedAt: Schema.Attribute.DateTime;
@@ -812,6 +888,11 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
+    restaurantScope: Schema.Attribute.Enumeration<
+      ['all', 'suwanee', 'frisco', 'southlake', 'midtown']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'all'>;
     sections: Schema.Attribute.JSON;
     seoDescription: Schema.Attribute.Text;
     seoKeywords: Schema.Attribute.JSON;
@@ -1375,6 +1456,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::allergen.allergen': ApiAllergenAllergen;
       'api::campaign.campaign': ApiCampaignCampaign;
       'api::happening.happening': ApiHappeningHappening;
       'api::homepage-section.homepage-section': ApiHomepageSectionHomepageSection;

@@ -37,12 +37,12 @@ const SEEDED_ITEM_ALLERGENS: Record<string, string[]> = {
 };
 const OWNER_LIST_LAYOUTS: Record<string, string[]> = {
   'api::allergen.allergen': ['name', 'shortLabel', 'sortOrder'],
-  'api::menu-item.menu-item': ['name', 'category', 'locations', 'allergens'],
-  'api::menu-category.menu-category': ['name', 'menuType', 'locations', 'sortOrder'],
-  'api::happening.happening': ['title', 'happeningType', 'locations', 'enabled'],
-  'api::campaign.campaign': ['name', 'locations', 'enabled', 'startsAt'],
-  'api::homepage-section.homepage-section': ['name', 'sectionKey', 'location', 'sortOrder'],
-  'api::site-page.site-page': ['title', 'pageType', 'location', 'sortOrder'],
+  'api::menu-item.menu-item': ['name', 'restaurantScope', 'category', 'allergens'],
+  'api::menu-category.menu-category': ['name', 'menuType', 'restaurantScope', 'sortOrder'],
+  'api::happening.happening': ['title', 'happeningType', 'restaurantScope', 'enabled'],
+  'api::campaign.campaign': ['name', 'restaurantScope', 'enabled', 'startsAt'],
+  'api::homepage-section.homepage-section': ['name', 'sectionKey', 'restaurantScope', 'sortOrder'],
+  'api::site-page.site-page': ['title', 'pageType', 'restaurantScope', 'sortOrder'],
 };
 const SEED_MEDIA_FILES: Record<string, string> = {
   'hero.png': 'hero_d0cafda107.png',
@@ -180,8 +180,18 @@ export default {
         const contentType = contentTypeService.findContentType(uid);
         if (!contentType) continue;
         const configuration = await contentTypeService.findConfiguration(contentType);
+        const scopeMetadata = (configuration as any).metadatas?.restaurantScope;
         await contentTypeService.updateConfiguration(contentType, {
           ...configuration,
+          metadatas: {
+            ...(configuration as any).metadatas,
+            ...(list.includes('restaurantScope') ? {
+              restaurantScope: {
+                edit: { ...scopeMetadata?.edit, label: 'Restaurant' },
+                list: { ...scopeMetadata?.list, label: 'Restaurant' },
+              },
+            } : {}),
+          },
           layouts: { ...configuration.layouts, list },
         });
       }
@@ -334,7 +344,7 @@ export default {
       const suwanee = await strapi.documents('api::location.location').findFirst({ filters: { slug: 'suwanee' } });
       await strapi.documents('api::campaign.campaign').create({
         data: {
-          name: '2026 Best of Gwinnett Voting', campaignType: 'external-cta', enabled: true,
+          name: '2026 Best of Gwinnett Voting', campaignType: 'external-cta', enabled: true, restaurantScope: 'suwanee',
           startsAt: '2026-09-01T00:00:00.000Z', endsAt: '2026-12-31T23:59:59.000Z', priority: 100,
           locations: suwanee ? [suwanee.documentId] : [], eyebrow: 'Best of Gwinnett · 2026',
           title: 'Love Kitchen Master?', accent: 'Cast your vote.',
@@ -347,11 +357,19 @@ export default {
       });
       await strapi.documents('api::campaign.campaign').create({
         data: {
-          name: 'Kitchen Master Insiders', campaignType: 'insiders', enabled: true, priority: 10,
+          name: 'Kitchen Master Insiders', campaignType: 'insiders', enabled: true, restaurantScope: 'all', priority: 10,
           eyebrow: 'Kitchen Master Insiders', title: 'Your table has', accent: 'its advantages.',
           body: 'Join for restaurant news, special events, and rewards—with your selected restaurant as your preferred Kitchen Master.',
           buttonLabel: 'Join the Insiders', dismissalKey: 'kitchen-master-insiders', delayMs: 1200,
         },
+        status: 'published',
+      });
+    }
+    const bestOfGwinnett = await strapi.documents('api::campaign.campaign').findFirst({ filters: { dismissalKey: 'best-of-gwinnett-2026' } });
+    if (bestOfGwinnett && (bestOfGwinnett as any).restaurantScope !== 'suwanee') {
+      await strapi.documents('api::campaign.campaign').update({
+        documentId: bestOfGwinnett.documentId,
+        data: { restaurantScope: 'suwanee' } as any,
         status: 'published',
       });
     }
@@ -367,6 +385,7 @@ export default {
         await strapi.documents('api::site-page.site-page').create({
           data: {
             ...page,
+            restaurantScope: 'all',
             sections: 'sections' in page ? page.sections : [],
             formConfig: (page.formConfig ?? {}) as any,
             seoTitle: `${page.title} | Kitchen Master`,
@@ -383,6 +402,7 @@ export default {
         await strapi.documents('api::site-page.site-page').create({
           data: {
             ...page,
+            restaurantScope: 'all',
             sections: 'sections' in page ? page.sections : [],
             formConfig: (page.formConfig ?? {}) as any,
             seoTitle: `${page.title} | Kitchen Master`,
@@ -451,7 +471,7 @@ export default {
         { name:'Connect Links',sectionKey:'connect',eyebrow:'More from Kitchen Master',title:'Come be part',accent:'of the story.',items:[{eyebrow:'Questions & feedback',title:'Contact us',url:'/pages/contact'},{eyebrow:'Join our team',title:'Careers',url:'/careers/{{location}}'},{eyebrow:'Grow with us',title:'Franchise opportunities',url:'/pages/franchise'},{eyebrow:'Gather together',title:'Private dining',url:'/pages/private-dining'}],sortOrder:10 },
         { name:'Footer',sectionKey:'footer',title:'Tradition meets innovation.',caption:'© 2026 Kitchen Master',sortOrder:11 },
       ];
-      for (const section of sections) await strapi.documents('api::homepage-section.homepage-section').create({ data: section as any, status:'published' });
+      for (const section of sections) await strapi.documents('api::homepage-section.homepage-section').create({ data: { ...section, restaurantScope:'all' } as any, status:'published' });
     }
 
     const supplementalHomepageSections = [
@@ -462,7 +482,7 @@ export default {
     ];
     for (const section of supplementalHomepageSections) {
       const existing = await strapi.documents('api::homepage-section.homepage-section').findFirst({ filters: { sectionKey: section.sectionKey as any } });
-      if (!existing) await strapi.documents('api::homepage-section.homepage-section').create({ data: section as any, status:'published' });
+      if (!existing) await strapi.documents('api::homepage-section.homepage-section').create({ data: { ...section, restaurantScope:'all' } as any, status:'published' });
     }
     const globalHappyHour = await strapi.documents('api::homepage-section.homepage-section').findFirst({ filters: { sectionKey: 'happy-hour', location: { id: { $null: true } } } as any });
     if (globalHappyHour?.body === 'Selected bites and pours at participating Kitchen Master restaurants. Times and availability vary by location.') {
@@ -486,6 +506,7 @@ export default {
           data: {
             name:`Happy Hour · ${location.name}`,
             sectionKey:'happy-hour',
+            restaurantScope:locationSlug,
             location:location.documentId,
             eyebrow:'A little earlier',
             title:'Happy hour.',
@@ -495,6 +516,12 @@ export default {
             sortOrder:6,
           } as any,
           status:'published',
+        });
+      } else if ((existing as any).restaurantScope !== locationSlug) {
+        await strapi.documents('api::homepage-section.homepage-section').update({
+          documentId: existing.documentId,
+          data: { restaurantScope: locationSlug } as any,
+          status: 'published',
         });
       }
     }
@@ -595,6 +622,7 @@ export default {
             slug: `${menu.menuType}-${menu.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`,
             menuType: menu.menuType,
             note: menu.note,
+            restaurantScope: 'all',
             sortOrder: categoryIndex + 1,
           },
           status: 'published',
@@ -609,6 +637,7 @@ export default {
               tags: item.tags ?? [],
               sortOrder: itemIndex + 1,
               category: category.documentId,
+              restaurantScope: 'all',
               allergens: allergensFor(item.name),
             },
             status: 'published',
@@ -629,10 +658,13 @@ export default {
           populate: ['locations'],
         });
         if (existing) {
-          if (!Array.isArray(existing.locations) || existing.locations.length === 0) {
+          if (!Array.isArray(existing.locations) || existing.locations.length === 0 || (existing as any).restaurantScope !== location.slug) {
             await strapi.documents('api::menu-category.menu-category').update({
               documentId: existing.documentId,
-              data: { locations: [location.documentId] } as any,
+              data: {
+                ...(!Array.isArray(existing.locations) || existing.locations.length === 0 ? { locations: [location.documentId] } : {}),
+                restaurantScope: location.slug,
+              } as any,
               status: 'published',
             });
           }
@@ -644,7 +676,8 @@ export default {
             slug,
             menuType: 'happy-hour',
             note: menu.note,
-            locations: [location.documentId],
+              locations: [location.documentId],
+              restaurantScope: location.slug,
             sortOrder: 100 + (locationIndex * 10) + categoryIndex,
           } as any,
           status: 'published',
@@ -659,6 +692,7 @@ export default {
               sortOrder:itemIndex + 1,
               category:category.documentId,
               locations:[location.documentId],
+              restaurantScope:location.slug,
               allergens:allergensFor(item.name),
             } as any,
             status: 'published',
@@ -679,6 +713,9 @@ export default {
       const categoryLocationIds = Array.isArray(category.locations)
         ? category.locations.map((location: any) => location.documentId).filter(Boolean)
         : [];
+      const categoryLocationSlugs = Array.isArray(category.locations)
+        ? category.locations.map((location: any) => location.slug).filter(Boolean)
+        : [];
       for (const item of Array.isArray(category.items) ? category.items : []) {
         const updates: Record<string, unknown> = {};
         const seededAllergens = allergensFor(item.name);
@@ -687,6 +724,11 @@ export default {
         }
         if (categoryLocationIds.length > 0 && (!Array.isArray(item.locations) || item.locations.length === 0)) {
           updates.locations = categoryLocationIds;
+        }
+        if (categoryLocationSlugs.length === 1 && (!item.restaurantScope || item.restaurantScope === 'all')) {
+          updates.restaurantScope = categoryLocationSlugs[0];
+        } else if (categoryLocationSlugs.length > 1 && (!item.restaurantScope || item.restaurantScope === 'all')) {
+          updates.restaurantScope = 'multiple';
         }
         if (Object.keys(updates).length > 0) {
           await strapi.documents('api::menu-item.menu-item').update({
@@ -703,6 +745,7 @@ export default {
       await strapi.documents('api::happening.happening').create({
         data: {
           title: 'Sample announcement — edit or replace', slug: 'sample-announcement', happeningType: 'event', enabled: false,
+          restaurantScope: 'all',
           featured: false, eyebrow: 'Happenings', summary: 'Add a concise special or event summary here.', details: 'This disabled sample shows the fields available for the Happenings page and announcement bar.',
           buttonLabel: 'See what’s happening', buttonUrl: '/pages/happenings', showInBanner: true, dismissalKey: 'sample-announcement-v1', priority: 0, sortOrder: 1,
         },
@@ -744,6 +787,7 @@ export default {
               featured:true,
               schedule:'Available now',
               locations:[suwanee.documentId],
+              restaurantScope:'suwanee',
               ...(image ? { image } : {}),
               showInBanner:false,
               priority:50,
@@ -753,10 +797,11 @@ export default {
         } else {
           const legacyCopy = existing.summary === 'Fresh salmon, thinly sliced and finished with roasted konbu and black sesame.'
             || existing.summary === 'Whole grilled branzino glazed with yuzu-ponzu and finished with fragrant lemongrass oil.';
-          if (existing.image && existing.buttonUrl !== 'https://www.kitchenmasterga.com/weekly-specials-suwanee-ga' && !legacyCopy) continue;
+          if (existing.image && existing.buttonUrl !== 'https://www.kitchenmasterga.com/weekly-specials-suwanee-ga' && !legacyCopy && (existing as any).restaurantScope === 'suwanee') continue;
           await strapi.documents('api::happening.happening').update({
             documentId: existing.documentId,
             data: {
+              restaurantScope:'suwanee',
               ...(!existing.image && image ? { image } : {}),
               ...(existing.buttonUrl === 'https://www.kitchenmasterga.com/weekly-specials-suwanee-ga' ? { buttonLabel:null, buttonUrl:null } : {}),
               ...(legacyCopy ? { summary:specialData.summary, details:specialData.details } : {}),
@@ -787,6 +832,7 @@ export default {
             endsAt:'2026-11-01T02:00:00.000Z',
             schedule:'October 31 · 5–10 PM',
             locations:[suwanee.documentId],
+            restaurantScope:'suwanee',
             ...(halloweenImage ? { image:halloweenImage } : {}),
             buttonLabel:'View event',
             showInBanner:true,
@@ -796,15 +842,50 @@ export default {
           } as any,
           status:'published',
         });
-      } else if (halloween.buttonUrl === '/pages/happenings' || (!halloween.image && halloweenImage)) {
+      } else if (halloween.buttonUrl === '/pages/happenings' || (!halloween.image && halloweenImage) || (halloween as any).restaurantScope !== 'suwanee') {
         await strapi.documents('api::happening.happening').update({
           documentId:halloween.documentId,
           data:{
+            restaurantScope:'suwanee',
             ...(halloween.buttonUrl === '/pages/happenings' ? { buttonUrl:null } : {}),
             ...(!halloween.image && halloweenImage ? { image:halloweenImage } : {}),
           } as any,
           status:'published',
         });
+      }
+    }
+
+    // Existing rows predate the filter-friendly enum. Fill only blank scopes so future owner choices are never overwritten.
+    const scopedCollections = [
+      { uid:'api::menu-category.menu-category', relation:'locations', allowsMultiple:true },
+      { uid:'api::menu-item.menu-item', relation:'locations', allowsMultiple:true },
+      { uid:'api::happening.happening', relation:'locations', allowsMultiple:true },
+      { uid:'api::campaign.campaign', relation:'locations', allowsMultiple:true },
+      { uid:'api::homepage-section.homepage-section', relation:'location', allowsMultiple:false },
+      { uid:'api::site-page.site-page', relation:'location', allowsMultiple:false },
+    ] as const;
+    for (const collection of scopedCollections) {
+      for (const status of ['published', 'draft'] as const) {
+        const entries = await strapi.documents(collection.uid as any).findMany({
+          status,
+          limit: 1000,
+          populate: [collection.relation],
+        } as any) as any[];
+        for (const entry of entries) {
+          if (entry.restaurantScope) continue;
+          const related = Array.isArray(entry[collection.relation])
+            ? entry[collection.relation]
+            : entry[collection.relation] ? [entry[collection.relation]] : [];
+          const slugs = related.map((location: any) => location.slug).filter(Boolean);
+          const restaurantScope = slugs.length === 0
+            ? 'all'
+            : slugs.length === 1 || !collection.allowsMultiple ? slugs[0] : 'multiple';
+          await strapi.documents(collection.uid as any).update({
+            documentId: entry.documentId,
+            data: { restaurantScope } as any,
+            ...(status === 'published' ? { status } : {}),
+          } as any);
+        }
       }
     }
   },

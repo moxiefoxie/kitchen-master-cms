@@ -15,7 +15,8 @@
     "startsAt": { "type": "datetime" },
     "endsAt": { "type": "datetime" },
     "priority": { "type": "integer", "default": 0 },
-    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Leave empty to show this campaign at every restaurant." },
+    "restaurantScope": { "type": "enumeration", "enum": ["all", "suwanee", "frisco", "southlake", "midtown", "multiple"], "default": "all", "required": true, "description": "Controls website visibility and provides dropdown filtering. Choose all for every restaurant; choose multiple only when Locations contains more than one restaurant." },
+    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Only required when Restaurant is multiple. Otherwise the Restaurant dropdown controls visibility." },
     "eyebrow": { "type": "string" },
     "title": { "type": "string", "required": true },
     "accent": { "type": "string" },
@@ -28,6 +29,6 @@
     "delayMs": { "type": "integer", "default": 1200, "min": 0, "max": 30000 }
   },
   "config": {
-    "layouts": { "list": ["name", "locations", "enabled", "startsAt"] }
+    "layouts": { "list": ["name", "restaurantScope", "enabled", "startsAt"] }
   }
 }

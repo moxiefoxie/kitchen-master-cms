@@ -5,7 +5,7 @@
     "singularName": "menu-item",
     "pluralName": "menu-items",
     "displayName": "Menu Item",
-    "description": "Food, drink, and happy-hour items. Use Restaurants to filter the Content Manager; an empty Restaurants field applies everywhere."
+    "description": "Food, drink, and happy-hour items. Use the Restaurant dropdown to control and filter where each item appears."
   },
   "options": { "draftAndPublish": true },
   "attributes": {
@@ -14,11 +14,12 @@
     "description": { "type": "text" },
     "tags": { "type": "json" },
     "allergens": { "type": "relation", "relation": "manyToMany", "target": "api::allergen.allergen", "inversedBy": "items", "description": "Select every major allergen confirmed for this item. These selections appear as icons on the website." },
-    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Restaurant view/filter. Leave empty for an item available at every restaurant." },
+    "restaurantScope": { "type": "enumeration", "enum": ["all", "suwanee", "frisco", "southlake", "midtown", "multiple"], "default": "all", "required": true, "description": "Controls website visibility and provides dropdown filtering. Choose all for every restaurant; choose multiple only when Locations contains more than one restaurant." },
+    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Only required when Restaurant is multiple. Otherwise the Restaurant dropdown controls visibility." },
     "sortOrder": { "type": "integer", "default": 0 },
     "category": { "type": "relation", "relation": "manyToOne", "target": "api::menu-category.menu-category", "inversedBy": "items" }
   },
   "config": {
-    "layouts": { "list": ["name", "category", "locations", "allergens"] }
+    "layouts": { "list": ["name", "restaurantScope", "category", "allergens"] }
   }
 }

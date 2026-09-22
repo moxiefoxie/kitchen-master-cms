@@ -1,12 +1,13 @@
 {
   "kind": "collectionType",
   "collectionName": "homepage_sections",
-  "info": { "singularName": "homepage-section", "pluralName": "homepage-sections", "displayName": "Homepage Section", "description": "Editable homepage sections. Leave Location empty for the global default, or assign one to override that section for a restaurant." },
+  "info": { "singularName": "homepage-section", "pluralName": "homepage-sections", "displayName": "Homepage Section", "description": "Editable homepage sections. Use the Restaurant dropdown for a shared section or a restaurant-specific override." },
   "options": { "draftAndPublish": true },
   "attributes": {
     "name": { "type": "string", "required": true },
     "sectionKey": { "type": "enumeration", "enum": ["location-gateway", "reservations", "story", "featured-menu", "food-menu", "drinks", "happy-hour", "dining-feature", "private-dining", "social-proof", "locations", "connect", "footer"], "required": true },
-    "location": { "type": "relation", "relation": "manyToOne", "target": "api::location.location", "description": "Optional. When set, this section overrides the global section with the same key for this location." },
+    "restaurantScope": { "type": "enumeration", "enum": ["all", "suwanee", "frisco", "southlake", "midtown"], "default": "all", "required": true, "description": "Controls website visibility and provides dropdown filtering. Choose all for the shared section or one restaurant for an override." },
+    "location": { "type": "relation", "relation": "manyToOne", "target": "api::location.location", "description": "Legacy relation retained for existing entries. The Restaurant dropdown controls visibility." },
     "eyebrow": { "type": "string" },
     "title": { "type": "string" },
     "accent": { "type": "string" },
@@ -20,6 +21,6 @@
     "sortOrder": { "type": "integer", "default": 0 }
   },
   "config": {
-    "layouts": { "list": ["name", "sectionKey", "location", "sortOrder"] }
+    "layouts": { "list": ["name", "sectionKey", "restaurantScope", "sortOrder"] }
   }
 }

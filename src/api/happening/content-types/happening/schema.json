@@ -5,7 +5,7 @@
     "singularName": "happening",
     "pluralName": "happenings",
     "displayName": "Happening",
-    "description": "Location-aware specials, events, and optional dismissible header announcements. Leave Locations empty to show at every restaurant."
+    "description": "Location-aware specials, events, and optional dismissible header announcements. Use the Restaurant dropdown to control and filter visibility."
   },
   "options": { "draftAndPublish": true },
   "attributes": {
@@ -23,13 +23,14 @@
     "image": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "buttonLabel": { "type": "string" },
     "buttonUrl": { "type": "string" },
-    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Optional. Leave empty to display at all locations." },
+    "restaurantScope": { "type": "enumeration", "enum": ["all", "suwanee", "frisco", "southlake", "midtown", "multiple"], "default": "all", "required": true, "description": "Controls website visibility and provides dropdown filtering. Choose all for every restaurant; choose multiple only when Locations contains more than one restaurant." },
+    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Only required when Restaurant is multiple. Otherwise the Restaurant dropdown controls visibility." },
     "showInBanner": { "type": "boolean", "default": false, "description": "Show this item in the dismissible bar beneath the site header while active." },
     "dismissalKey": { "type": "string", "description": "Change this value when you want a previously dismissed banner to appear again." },
     "priority": { "type": "integer", "default": 0 },
     "sortOrder": { "type": "integer", "default": 0 }
   },
   "config": {
-    "layouts": { "list": ["title", "happeningType", "locations", "enabled"] }
+    "layouts": { "list": ["title", "happeningType", "restaurantScope", "enabled"] }
   }
 }
