@@ -25,7 +25,7 @@ export default {
         limit: 100,
         populate: ['location', 'heroImage', 'socialImage'],
       }),
-      strapi.documents('api::homepage-section.homepage-section').findMany({ status, sort: ['sortOrder:asc'], limit: 100, populate: ['image', 'images'] }),
+      strapi.documents('api::homepage-section.homepage-section').findMany({ status, sort: ['sortOrder:asc'], limit: 100, populate: ['location', 'image', 'images'] }),
       strapi.documents('api::campaign.campaign').findMany({ status, sort: ['priority:desc'], limit: 100, populate: ['locations', 'image'] }),
     ]);
 

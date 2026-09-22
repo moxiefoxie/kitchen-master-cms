@@ -3,6 +3,12 @@ import { DRINK_CATEGORIES, MENU_CATEGORIES } from './seed/menuData';
 import { existsSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+const TEST_CONTACT_EMAIL = 'switham.gca@gmail.com';
+const LEGACY_CONTACT_EMAIL = 'Management@kitchenmasterga.com';
+const DEFAULT_HIRING_ROLES = [
+  'Front of house', 'Server', 'Bartender', 'Host', 'Kitchen', 'Sushi chef', 'Management', 'Other',
+];
+
 const locations = [
   {
     name: 'Suwanee', slug: 'suwanee', state: 'Georgia',
@@ -17,7 +23,9 @@ const locations = [
       { quote: 'Shaun provided the best service and the food was amazing.', author: 'Recent Suwanee guest', rating: 5 },
       { quote: 'This was my first time at Kitchen Master and it won’t be my last!', author: 'Recent Suwanee guest', rating: 5 },
     ],
-    reservationUrl: 'https://resy.com/cities/suwanee-ga/venues/kitchen-master-suwanee?date=2026-08-11&seats=2', sortOrder: 1,
+    contactEmail: TEST_CONTACT_EMAIL, privateDiningEmail: TEST_CONTACT_EMAIL,
+    hiringEmail: TEST_CONTACT_EMAIL, hiringRoles: DEFAULT_HIRING_ROLES,
+    reservationUrl: 'https://resy.com/cities/suwanee-ga/venues/kitchen-master-suwanee', sortOrder: 1,
   },
   {
     name: 'Frisco', slug: 'frisco', state: 'Texas', address: '9285 Preston Rd',
@@ -31,6 +39,9 @@ const locations = [
       { quote: 'Everything we ordered was delicious — the xiaolongbao were juicy and flavorful.', author: 'Xiaoyu S. · Google', rating: 5 },
       { quote: 'The shrimp were crispy outside, juicy inside, and full of flavor.', author: 'Thi Kim D. · Google', rating: 5 },
     ],
+    contactEmail: TEST_CONTACT_EMAIL, privateDiningEmail: TEST_CONTACT_EMAIL,
+    hiringEmail: TEST_CONTACT_EMAIL, hiringRoles: DEFAULT_HIRING_ROLES,
+    reservationUrl: 'https://www.kitchenmasterbistro.com/reservations-frisco',
     orderUrl: 'https://order.toasttab.com/online/kitchen-master-bistro-9285-preston-rd', sortOrder: 2,
   },
   {
@@ -38,24 +49,49 @@ const locations = [
     city: 'Southlake, TX 76092', phone: '214-724-5600', latitude: 32.9369978,
     longitude: -97.1029086, locationStatus: 'open', hours: 'Tue–Thu 11–9 · Fri–Sat 11–10',
     instagramUrl: 'https://www.instagram.com/kitchenmaster.tx/',
+    contactEmail: TEST_CONTACT_EMAIL, privateDiningEmail: TEST_CONTACT_EMAIL,
+    hiringEmail: TEST_CONTACT_EMAIL, hiringRoles: DEFAULT_HIRING_ROLES,
+    reservationUrl: 'tel:+12147245600',
     orderUrl: 'https://order.toasttab.com/online/kitchen-master-bistro-southlake-3311-w-state-hwy-114', sortOrder: 3,
   },
   {
     name: 'Midtown Atlanta', slug: 'midtown', state: 'Georgia', address: 'Address to be announced',
     city: 'Atlanta, GA', phone: 'Coming soon', latitude: 33.7838, longitude: -84.3831,
     instagramUrl: 'https://www.instagram.com/kitchenmaster.ga/',
+    contactEmail: TEST_CONTACT_EMAIL, privateDiningEmail: TEST_CONTACT_EMAIL,
+    hiringEmail: TEST_CONTACT_EMAIL, hiringRoles: DEFAULT_HIRING_ROLES,
     locationStatus: 'coming-soon', hours: 'Opening details coming soon', orderUrl: '', sortOrder: 4,
   },
 ];
 
-const sitePages = [
+type SeedPage = {
+  title: string;
+  slug: string;
+  pageType: 'home' | 'private-dining' | 'contact' | 'careers' | 'franchise';
+  heroEyebrow?: string;
+  heroTitle: string;
+  heroAccent: string;
+  heroDescription: string;
+  sections?: Array<{ eyebrow: string; heading: string; body: string }>;
+  formConfig?: Record<string, unknown>;
+  sortOrder: number;
+};
+
+const sitePages: SeedPage[] = [
   { title: 'Home', slug: 'home', pageType: 'home', heroTitle: 'Tradition,', heroAccent: 'mastered.', heroDescription: 'Soup dumplings, fresh sushi, and bold modern plates—crafted daily at Kitchen Master.', sortOrder: 1 },
-  { title: 'Our Story', slug: 'our-story', pageType: 'story', heroTitle: 'Old-world technique.', heroAccent: 'New-world spirit.', heroDescription: 'Taiwanese and Japanese traditions meet a modern American point of view.', sortOrder: 2 },
-  { title: 'Private Dining', slug: 'private-dining', pageType: 'private-dining', heroTitle: 'Gather around', heroAccent: 'our table.', heroDescription: 'Plan a private dinner, celebration, or group dining experience.', sortOrder: 3 },
-  { title: 'Contact', slug: 'contact', pageType: 'contact', heroTitle: 'Come say', heroAccent: 'hello.', heroDescription: 'Questions, feedback, and general inquiries for Kitchen Master.', sortOrder: 4 },
+  { title: 'Private Dining', slug: 'private-dining', pageType: 'private-dining', heroEyebrow: 'Private dining', heroTitle: 'Your occasion.', heroAccent: 'Our craft.', heroDescription: 'From milestone dinners to company gatherings, our team will help shape a generous, memorable experience around your guests.', sections: [
+    { eyebrow:'Made for gathering',heading:'A table that feels like yours.',body:'Tell us what you are celebrating, how many guests you expect, and the atmosphere you have in mind. Our restaurant team will follow up about availability, room options, menus, and minimums.' },
+    { eyebrow:'Thoughtfully hosted',heading:'Dinner, with every detail considered.',body:'Private dining options vary by restaurant. We can help with family-style menus, business dinners, birthdays, receptions, and other group occasions.' },
+  ], formConfig: { formEyebrow:'Event inquiry', formTitle:'Plan with {{location}}.', formDescription:'Required fields help us route your message to the right team.', submitLabel:'Request event details', eventTypeOptions:['Birthday','Wedding or rehearsal dinner','Corporate event','Family gathering','Reception','Other'] }, sortOrder: 3 },
+  { title: 'Contact', slug: 'contact', pageType: 'contact', heroEyebrow: 'Contact us', heroTitle: 'We’re here to', heroAccent: 'help.', heroDescription: 'Questions about a visit, feedback for our team, or help with an order? Send a note directly to your Kitchen Master location.', sections: [
+    { eyebrow:'Your neighborhood team',heading:'Let’s start a conversation.',body:'Choose the restaurant your message is about and share as much detail as you can. The location team will review your note and respond as soon as possible.' },
+  ], formConfig: { formEyebrow:'Send a note', formTitle:'Contact {{location}}.', formDescription:'Required fields help us route your message to the right team.', submitLabel:'Send message', subjectOptions:['General question','Order support','Feedback about a visit','Press or partnership','Other'] }, sortOrder: 4 },
   { title: 'Careers', slug: 'careers', pageType: 'careers', heroTitle: 'Master your', heroAccent: 'craft.', heroDescription: 'Build your hospitality career with Kitchen Master.', sortOrder: 5 },
-  { title: 'Franchise Opportunities', slug: 'franchise', pageType: 'franchise', heroTitle: 'Grow with', heroAccent: 'Kitchen Master.', heroDescription: 'Learn about future franchise and development opportunities.', sortOrder: 6 },
-] as const;
+  { title: 'Franchise Opportunities', slug: 'franchise', pageType: 'franchise', heroEyebrow: 'Franchise opportunities', heroTitle: 'Grow with', heroAccent: 'Kitchen Master.', heroDescription: 'We are exploring thoughtful growth with experienced operators who value hospitality, consistency, and craft.', sections: [
+    { eyebrow:'The right partnership',heading:'Built for hands-on operators.',body:'We are interested in partners who understand their market, care deeply about guest experience, and are ready to protect the standards behind every Kitchen Master meal.' },
+    { eyebrow:'Start the conversation',heading:'Tell us where you want to grow.',body:'Share your target market, operating background, and investment readiness. Submitting an inquiry does not guarantee territory availability or approval; our team will follow up when there may be a fit.' },
+  ], formConfig: { formEyebrow:'Franchise inquiry', formTitle:'Introduce yourself.', formDescription:'Required fields help us route your message to the right team.', submitLabel:'Submit franchise inquiry', experienceOptions:['Restaurant owner or operator','Multi-unit operator','Hospitality management','Business ownership outside hospitality','New to ownership'], investmentRangeOptions:['Under $500,000','$500,000–$1 million','$1–$2 million','$2 million+'] }, sortOrder: 6 },
+];
 
 export default {
   /**
@@ -98,11 +134,23 @@ export default {
 
     for (const location of locations) {
       const existing = await strapi.documents('api::location.location').findFirst({ filters: { slug: location.slug } });
+      const emailUpdates = existing ? {
+        ...(!existing.contactEmail || existing.contactEmail === LEGACY_CONTACT_EMAIL ? { contactEmail: TEST_CONTACT_EMAIL } : {}),
+        ...(!existing.privateDiningEmail || existing.privateDiningEmail === LEGACY_CONTACT_EMAIL ? { privateDiningEmail: TEST_CONTACT_EMAIL } : {}),
+        ...(!existing.hiringEmail || existing.hiringEmail === LEGACY_CONTACT_EMAIL ? { hiringEmail: TEST_CONTACT_EMAIL } : {}),
+      } : {};
+      if (existing && Object.keys(emailUpdates).length > 0) {
+        await strapi.documents('api::location.location').update({
+          documentId: existing.documentId,
+          data: emailUpdates,
+          status: 'published',
+        });
+      }
       if (existing && !existing.heroTitle) {
         await strapi.documents('api::location.location').update({
           documentId: existing.documentId,
           data: {
-            contactEmail: 'Management@kitchenmasterga.com',
+            contactEmail: TEST_CONTACT_EMAIL,
             heroEyebrow: 'Taiwanese craft · Japanese precision',
             heroTitle: 'Tradition,', heroAccent: 'mastered.',
             heroDescription: `Soup dumplings, fresh sushi, and bold modern plates—crafted daily in ${location.name}.`,
@@ -123,6 +171,9 @@ export default {
       if (existing && location.slug === 'suwanee' && existing.reservationUrl !== location.reservationUrl) {
         await strapi.documents('api::location.location').update({ documentId: existing.documentId, data: { reservationUrl: location.reservationUrl }, status: 'published' });
       }
+      if (existing && !existing.reservationUrl && location.reservationUrl) {
+        await strapi.documents('api::location.location').update({ documentId: existing.documentId, data: { reservationUrl: location.reservationUrl }, status: 'published' });
+      }
       if (existing && !existing.instagramUrl) {
         await strapi.documents('api::location.location').update({
           documentId: existing.documentId,
@@ -132,6 +183,28 @@ export default {
             googleRating: 'googleRating' in location ? location.googleRating : undefined,
             googleReviewCount: 'googleReviewCount' in location ? location.googleReviewCount : undefined,
             reviews: 'reviews' in location ? location.reviews : [],
+          },
+          status: 'published',
+        });
+      }
+      if (existing && (!existing.hiringEmail || !Array.isArray(existing.hiringRoles) || existing.hiringRoles.length === 0)) {
+        await strapi.documents('api::location.location').update({
+          documentId: existing.documentId,
+          data: {
+            ...(!existing.hiringEmail ? { hiringEmail: TEST_CONTACT_EMAIL } : {}),
+            ...(!Array.isArray(existing.hiringRoles) || existing.hiringRoles.length === 0
+              ? { hiringRoles: DEFAULT_HIRING_ROLES }
+              : {}),
+          },
+          status: 'published',
+        });
+      }
+      if (existing && (!existing.contactEmail || !existing.privateDiningEmail)) {
+        await strapi.documents('api::location.location').update({
+          documentId: existing.documentId,
+          data: {
+            ...(!existing.contactEmail ? { contactEmail: TEST_CONTACT_EMAIL } : {}),
+            ...(!existing.privateDiningEmail ? { privateDiningEmail: TEST_CONTACT_EMAIL } : {}),
           },
           status: 'published',
         });
@@ -146,10 +219,26 @@ export default {
           heroTitle: 'Tradition,',
           heroAccent: 'mastered.',
           heroDescription: 'Soup dumplings, fresh sushi, and bold modern plates—crafted daily in {{location}}.',
-          contactEmail: 'Management@kitchenmasterga.com',
+          contactEmail: TEST_CONTACT_EMAIL,
+          franchiseEmail: TEST_CONTACT_EMAIL,
           instagramUrl: 'https://www.instagram.com/kitchenmaster.ga/',
           facebookUrl: 'https://www.facebook.com/kitchenmasterga/',
           defaultReservationUrl: 'https://resy.com/cities/suwanee-ga/venues/kitchen-master-suwanee?date=2026-08-11&seats=2',
+        },
+        status: 'published',
+      });
+    }
+    if (existingSettings && (
+      !existingSettings.contactEmail ||
+      existingSettings.contactEmail === LEGACY_CONTACT_EMAIL ||
+      !existingSettings.franchiseEmail ||
+      existingSettings.franchiseEmail === LEGACY_CONTACT_EMAIL
+    )) {
+      await strapi.documents('api::site-setting.site-setting').update({
+        documentId: existingSettings.documentId,
+        data: {
+          ...(!existingSettings.contactEmail || existingSettings.contactEmail === LEGACY_CONTACT_EMAIL ? { contactEmail: TEST_CONTACT_EMAIL } : {}),
+          ...(!existingSettings.franchiseEmail || existingSettings.franchiseEmail === LEGACY_CONTACT_EMAIL ? { franchiseEmail: TEST_CONTACT_EMAIL } : {}),
         },
         status: 'published',
       });
@@ -182,13 +271,19 @@ export default {
       });
     }
 
+    const storyPage = await strapi.documents('api::site-page.site-page').findFirst({ filters: { slug: 'our-story' } });
+    if (storyPage?.publishedAt) {
+      await strapi.documents('api::site-page.site-page').unpublish({ documentId: storyPage.documentId });
+    }
+
     const existingPages = await strapi.documents('api::site-page.site-page').findMany({ limit: 1 });
     if (existingPages.length === 0) {
       for (const page of sitePages) {
         await strapi.documents('api::site-page.site-page').create({
           data: {
             ...page,
-            sections: [],
+            sections: 'sections' in page ? page.sections : [],
+            formConfig: (page.formConfig ?? {}) as any,
             seoTitle: `${page.title} | Kitchen Master`,
             seoDescription: page.heroDescription,
           },
@@ -197,25 +292,74 @@ export default {
       }
     }
 
+    for (const page of sitePages.filter((entry) => ['private-dining', 'contact', 'franchise'].includes(entry.slug))) {
+      const existing = await strapi.documents('api::site-page.site-page').findFirst({ filters: { slug: page.slug } });
+      const hasFormConfig = existing?.formConfig && typeof existing.formConfig === 'object' && !Array.isArray(existing.formConfig) && Object.keys(existing.formConfig).length > 0;
+      if (existing && ((!Array.isArray(existing.sections) || existing.sections.length === 0) || !hasFormConfig)) {
+        await strapi.documents('api::site-page.site-page').update({
+          documentId: existing.documentId,
+          data: {
+            heroEyebrow: page.heroEyebrow,
+            heroTitle: page.heroTitle,
+            heroAccent: page.heroAccent,
+            heroDescription: page.heroDescription,
+            sections: 'sections' in page ? page.sections : [],
+            formConfig: (page.formConfig ?? {}) as any,
+          },
+          status: 'published',
+        });
+      }
+    }
+
+    const storySection = await strapi.documents('api::homepage-section.homepage-section').findFirst({ filters: { sectionKey: 'story' } });
+    if (storySection?.publishedAt) {
+      await strapi.documents('api::homepage-section.homepage-section').unpublish({ documentId: storySection.documentId });
+    }
+
     const existingHomepageSections = await strapi.documents('api::homepage-section.homepage-section').findMany({ limit: 1 });
     if (existingHomepageSections.length === 0) {
-      const [heroImage, storyImage, card1, card2, card3, featureImage, privateDiningImage] = await Promise.all([
-        cmsImage('hero.png'), cmsImage('dining.png'), cmsImage('soup-dumplings.png'), cmsImage('lamb-chop.png'),
+      const [heroImage, card1, card2, card3, featureImage, privateDiningImage] = await Promise.all([
+        cmsImage('hero.png'), cmsImage('soup-dumplings.png'), cmsImage('lamb-chop.png'),
         cmsImage('szechuan-wonton.png'), cmsImage('spread.jpg'), cmsImage('private-room.png'),
       ]);
       const featuredImages = [card1, card2, card3].filter(Boolean);
       const sections = [
         { name:'Location Gateway',sectionKey:'location-gateway',eyebrow:'Welcome to Kitchen Master',title:'Choose your',accent:'location.',body:'Menus, reservations, hours, and restaurant details are tailored to your selected Kitchen Master.',...(heroImage ? { image: heroImage } : {}),sortOrder:1 },
-        { name:'Our Story',sectionKey:'story',eyebrow:'Our philosophy',title:'Old-world technique.',accent:'New-world spirit.',body:'At Kitchen Master, Taiwanese and Japanese traditions meet a modern American point of view. Every fold, slice, and sizzle reflects our dedication to craft, flavor, and ingredients prepared fresh each day.',...(storyImage ? { image: storyImage } : {}),sortOrder:2 },
+        { name:'Reservations',sectionKey:'reservations',eyebrow:'Reservations',title:'Your table in',accent:'{{location}}.',body:'Choose a date and party size here, then view live times and complete your reservation securely with our reservation partner.',sortOrder:2 },
         { name:'Featured Menu',sectionKey:'featured-menu',eyebrow:'What we’re known for',title:'Made with patience.',accent:'Remembered by flavor.',items:[{eyebrow:'The signature',title:'Soup Dumplings'},{eyebrow:'From the wok',title:'Modern Plates'},{eyebrow:'Made to share',title:'Small Plates'}],...(featuredImages.length ? { images: featuredImages } : {}),sortOrder:3 },
         { name:'Food Menu',sectionKey:'food-menu',title:'The full menu.',body:'Handcrafted daily. Menu availability and pricing may change. Please tell your server about any allergies before ordering.',items:['V · Vegetarian','Raw · May be served raw or undercooked','Parties of six or more are subject to 20% gratuity'],sortOrder:4 },
         { name:'Drinks',sectionKey:'drinks',eyebrow:'From the bar',title:'Pour something',accent:'memorable.',body:'House cocktails inspired by Asian flavors, a considered wine and sake list, and thoughtful zero-proof drinks.',items:['Must be 21+ with valid identification','Selections and vintages may change','Please enjoy responsibly'],sortOrder:5 },
         { name:'Dining Feature',sectionKey:'dining-feature',eyebrow:'Dinner, done differently',title:'A table worth',accent:'gathering around.',body:'From a quick dinner to a long celebration, every meal is made to be shared.',...(featureImage ? { image: featureImage } : {}),sortOrder:6 },
         { name:'Private Dining',sectionKey:'private-dining',eyebrow:'Private dining',title:'Your occasion.',accent:'Our craft.',body:'Host an intimate dinner or a full celebration in a space designed for memorable meals. Our team will help shape the room and menu around your event.',...(privateDiningImage ? { image: privateDiningImage } : {}),caption:'Private rooms · Custom menus · Personal service',linkLabel:'Plan your event',linkUrl:'/pages/private-dining',sortOrder:7 },
-        { name:'Connect Links',sectionKey:'connect',eyebrow:'More from Kitchen Master',title:'Come be part',accent:'of the story.',sortOrder:8 },
-        { name:'Footer',sectionKey:'footer',title:'Tradition meets innovation.',caption:'© 2026 Kitchen Master',sortOrder:9 },
+        { name:'Social Proof',sectionKey:'social-proof',eyebrow:'From our guests',title:'Loved locally.',accent:'Shared often.',body:'See what guests are saying about Kitchen Master {{location}}, then follow along for new dishes and behind-the-scenes moments.',sortOrder:8 },
+        { name:'Locations',sectionKey:'locations',eyebrow:'Our restaurants',title:'Find your',accent:'Kitchen Master.',body:'Explore every Kitchen Master location and choose the restaurant you’d like to visit.',sortOrder:9 },
+        { name:'Connect Links',sectionKey:'connect',eyebrow:'More from Kitchen Master',title:'Come be part',accent:'of the story.',items:[{eyebrow:'Questions & feedback',title:'Contact us',url:'/pages/contact'},{eyebrow:'Join our team',title:'Careers',url:'/careers/{{location}}'},{eyebrow:'Grow with us',title:'Franchise opportunities',url:'/pages/franchise'},{eyebrow:'Gather together',title:'Private dining',url:'/pages/private-dining'}],sortOrder:10 },
+        { name:'Footer',sectionKey:'footer',title:'Tradition meets innovation.',caption:'© 2026 Kitchen Master',sortOrder:11 },
       ];
       for (const section of sections) await strapi.documents('api::homepage-section.homepage-section').create({ data: section as any, status:'published' });
+    }
+
+    const supplementalHomepageSections = [
+      { name:'Reservations',sectionKey:'reservations',eyebrow:'Reservations',title:'Your table in',accent:'{{location}}.',body:'Choose a date and party size here, then view live times and complete your reservation securely with our reservation partner.',sortOrder:2 },
+      { name:'Social Proof',sectionKey:'social-proof',eyebrow:'From our guests',title:'Loved locally.',accent:'Shared often.',body:'See what guests are saying about Kitchen Master {{location}}, then follow along for new dishes and behind-the-scenes moments.',sortOrder:8 },
+      { name:'Locations',sectionKey:'locations',eyebrow:'Our restaurants',title:'Find your',accent:'Kitchen Master.',body:'Explore every Kitchen Master location and choose the restaurant you’d like to visit.',sortOrder:9 },
+    ];
+    for (const section of supplementalHomepageSections) {
+      const existing = await strapi.documents('api::homepage-section.homepage-section').findFirst({ filters: { sectionKey: section.sectionKey as any } });
+      if (!existing) await strapi.documents('api::homepage-section.homepage-section').create({ data: section as any, status:'published' });
+    }
+    const connectSection = await strapi.documents('api::homepage-section.homepage-section').findFirst({ filters: { sectionKey: 'connect' } });
+    if (connectSection && (!Array.isArray(connectSection.items) || connectSection.items.length === 0)) {
+      await strapi.documents('api::homepage-section.homepage-section').update({
+        documentId: connectSection.documentId,
+        data: { items:[
+          {eyebrow:'Questions & feedback',title:'Contact us',url:'/pages/contact'},
+          {eyebrow:'Join our team',title:'Careers',url:'/careers/{{location}}'},
+          {eyebrow:'Grow with us',title:'Franchise opportunities',url:'/pages/franchise'},
+          {eyebrow:'Gather together',title:'Private dining',url:'/pages/private-dining'},
+        ] },
+        status:'published',
+      });
     }
 
     const existingCategories = await strapi.documents('api::menu-category.menu-category').findMany({ limit: 1 });

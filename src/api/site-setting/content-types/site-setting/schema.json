@@ -13,7 +13,8 @@
     "heroTitle": { "type": "string" },
     "heroAccent": { "type": "string" },
     "heroDescription": { "type": "text" },
-    "contactEmail": { "type": "email" },
+    "contactEmail": { "type": "email", "required": true, "description": "Global fallback recipient for website inquiries" },
+    "franchiseEmail": { "type": "email", "required": true, "description": "Recipient for franchise opportunity inquiries" },
     "instagramUrl": { "type": "string" },
     "facebookUrl": { "type": "string" },
     "defaultReservationUrl": { "type": "string" }

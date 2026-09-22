@@ -1,11 +1,12 @@
 {
   "kind": "collectionType",
   "collectionName": "homepage_sections",
-  "info": { "singularName": "homepage-section", "pluralName": "homepage-sections", "displayName": "Homepage Section", "description": "Independently editable sections assembled into the scrolling homepage" },
+  "info": { "singularName": "homepage-section", "pluralName": "homepage-sections", "displayName": "Homepage Section", "description": "Editable homepage sections. Leave Location empty for the global default, or assign one to override that section for a restaurant." },
   "options": { "draftAndPublish": true },
   "attributes": {
     "name": { "type": "string", "required": true },
-    "sectionKey": { "type": "enumeration", "enum": ["location-gateway", "story", "featured-menu", "food-menu", "drinks", "dining-feature", "private-dining", "connect", "footer"], "required": true, "unique": true },
+    "sectionKey": { "type": "enumeration", "enum": ["location-gateway", "reservations", "story", "featured-menu", "food-menu", "drinks", "dining-feature", "private-dining", "social-proof", "locations", "connect", "footer"], "required": true },
+    "location": { "type": "relation", "relation": "manyToOne", "target": "api::location.location", "description": "Optional. When set, this section overrides the global section with the same key for this location." },
     "eyebrow": { "type": "string" },
     "title": { "type": "string" },
     "accent": { "type": "string" },

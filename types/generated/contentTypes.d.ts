@@ -508,7 +508,7 @@ export interface ApiHomepageSectionHomepageSection
   extends Struct.CollectionTypeSchema {
   collectionName: 'homepage_sections';
   info: {
-    description: 'Independently editable sections assembled into the scrolling homepage';
+    description: 'Editable homepage sections. Leave Location empty for the global default, or assign one to override that section for a restaurant.';
     displayName: 'Homepage Section';
     pluralName: 'homepage-sections';
     singularName: 'homepage-section';
@@ -535,23 +535,26 @@ export interface ApiHomepageSectionHomepageSection
       'api::homepage-section.homepage-section'
     > &
       Schema.Attribute.Private;
+    location: Schema.Attribute.Relation<'manyToOne', 'api::location.location'>;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     sectionKey: Schema.Attribute.Enumeration<
       [
         'location-gateway',
+        'reservations',
         'story',
         'featured-menu',
         'food-menu',
         'drinks',
         'dining-feature',
         'private-dining',
+        'social-proof',
+        'locations',
         'connect',
         'footer',
       ]
     > &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique;
+      Schema.Attribute.Required;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
@@ -574,10 +577,11 @@ export interface ApiLocationLocation extends Struct.CollectionTypeSchema {
   attributes: {
     address: Schema.Attribute.String & Schema.Attribute.Required;
     city: Schema.Attribute.String & Schema.Attribute.Required;
-    contactEmail: Schema.Attribute.Email;
+    contactEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    facebookUrl: Schema.Attribute.String;
     gallery: Schema.Attribute.Media<'images', true>;
     googleRating: Schema.Attribute.Decimal &
       Schema.Attribute.SetMinMax<
@@ -594,7 +598,7 @@ export interface ApiLocationLocation extends Struct.CollectionTypeSchema {
     heroEyebrow: Schema.Attribute.String;
     heroImage: Schema.Attribute.Media<'images'>;
     heroTitle: Schema.Attribute.String;
-    hiringEmail: Schema.Attribute.Email;
+    hiringEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     hiringRoles: Schema.Attribute.JSON;
     hours: Schema.Attribute.Text;
     instagramUrl: Schema.Attribute.String;
@@ -616,6 +620,7 @@ export interface ApiLocationLocation extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String & Schema.Attribute.Required;
     orderUrl: Schema.Attribute.String;
     phone: Schema.Attribute.String;
+    privateDiningEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     reservationUrl: Schema.Attribute.String;
     reviews: Schema.Attribute.JSON;
@@ -723,6 +728,7 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    formConfig: Schema.Attribute.JSON;
     heroAccent: Schema.Attribute.String;
     heroDescription: Schema.Attribute.Text;
     heroEyebrow: Schema.Attribute.String;
@@ -776,12 +782,13 @@ export interface ApiSiteSettingSiteSetting extends Struct.SingleTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    contactEmail: Schema.Attribute.Email;
+    contactEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     defaultReservationUrl: Schema.Attribute.String;
     facebookUrl: Schema.Attribute.String;
+    franchiseEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     heroAccent: Schema.Attribute.String;
     heroDescription: Schema.Attribute.Text;
     heroEyebrow: Schema.Attribute.String;

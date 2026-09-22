@@ -19,6 +19,7 @@
     "heroDescription": { "type": "text" },
     "heroImage": { "type": "media", "multiple": false, "allowedTypes": ["images"], "description": "Page background image. On Home, this is the global background unless a Location has its own hero image." },
     "sections": { "type": "json" },
+    "formConfig": { "type": "json", "description": "Optional form headings, button label, and select options for Contact, Private Dining, Franchise, or Careers pages" },
     "seoTitle": { "type": "string" },
     "seoDescription": { "type": "text" },
     "seoKeywords": { "type": "json" },
