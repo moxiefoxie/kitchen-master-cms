@@ -18,6 +18,7 @@ const SEED_MEDIA_FILES: Record<string, string> = {
   'dining.png': 'dining_34d0d5c0f1.png',
   'salmon-carpaccio-special.png': 'salmon_carpaccio_special_9117f022.png',
   'branzino-special.png': 'branzino_special_f6e9559d.png',
+  'halloween-dumpling-night.jpg': 'halloween_dumpling_night_b5179ad2.jpg',
 };
 
 const locations = [
@@ -655,7 +656,11 @@ export default {
       }
 
       const halloweenSlug = 'sample-halloween-dumpling-night-2026';
-      const halloween = await strapi.documents('api::happening.happening').findFirst({ filters: { slug: halloweenSlug } });
+      const halloweenImage = await cmsImage('halloween-dumpling-night.jpg');
+      const halloween = await strapi.documents('api::happening.happening').findFirst({
+        filters: { slug: halloweenSlug },
+        populate: ['image'],
+      });
       if (!halloween) {
         await strapi.documents('api::happening.happening').create({
           data: {
@@ -671,6 +676,7 @@ export default {
             endsAt:'2026-11-01T02:00:00.000Z',
             schedule:'October 31 · 5–10 PM',
             locations:[suwanee.documentId],
+            ...(halloweenImage ? { image:halloweenImage } : {}),
             buttonLabel:'View event',
             showInBanner:true,
             dismissalKey:'halloween-suwanee-2026',
@@ -679,10 +685,13 @@ export default {
           } as any,
           status:'published',
         });
-      } else if (halloween.buttonUrl === '/pages/happenings') {
+      } else if (halloween.buttonUrl === '/pages/happenings' || (!halloween.image && halloweenImage)) {
         await strapi.documents('api::happening.happening').update({
           documentId:halloween.documentId,
-          data:{ buttonUrl:null } as any,
+          data:{
+            ...(halloween.buttonUrl === '/pages/happenings' ? { buttonUrl:null } : {}),
+            ...(!halloween.image && halloweenImage ? { image:halloweenImage } : {}),
+          } as any,
           status:'published',
         });
       }
