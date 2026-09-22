@@ -16,6 +16,8 @@ const SEED_MEDIA_FILES: Record<string, string> = {
   'spread.jpg': 'spread_5dd17df619.jpg',
   'private-room.png': 'private_room_f2c790f7b8.png',
   'dining.png': 'dining_34d0d5c0f1.png',
+  'salmon-carpaccio-special.png': 'salmon_carpaccio_special_9117f022.png',
+  'branzino-special.png': 'branzino_special_f6e9559d.png',
 };
 
 const locations = [
@@ -95,7 +97,7 @@ const sitePages: SeedPage[] = [
     { eyebrow:'Thoughtfully hosted',heading:'Dinner, with every detail considered.',body:'Private dining options vary by restaurant. We can help with family-style menus, business dinners, birthdays, receptions, and other group occasions.' },
   ], formConfig: { formEyebrow:'Event inquiry', formTitle:'Plan with {{location}}.', formDescription:'Required fields help us route your message to the right team.', submitLabel:'Request event details', eventTypeOptions:['Birthday','Wedding or rehearsal dinner','Corporate event','Family gathering','Reception','Other'] }, sortOrder: 3 },
   { title: 'Contact', slug: 'contact', pageType: 'contact', heroEyebrow: 'Contact us', heroTitle: 'We’re here to', heroAccent: 'help.', heroDescription: 'Questions about a visit, feedback for our team, or help with an order? Send a note directly to your Kitchen Master location.', sections: [], formConfig: { formEyebrow:'Send a note', formTitle:'Contact {{location}}.', formDescription:'Required fields help us route your message to the right team.', submitLabel:'Send message', subjectOptions:['General question','Order support','Feedback about a visit','Press or partnership','Other'] }, sortOrder: 4 },
-  { title: 'Careers', slug: 'careers', pageType: 'careers', heroTitle: 'Master your', heroAccent: 'craft.', heroDescription: 'Build your hospitality career with Kitchen Master.', formConfig: { formEyebrow:'Join the team', formTitle:'Apply to {{location}}.', formDescription:'Choose your restaurant and tell us where you shine.', submitLabel:'Submit application' }, sortOrder: 5 },
+  { title: 'Careers', slug: 'careers', pageType: 'careers', heroTitle: 'Master your', heroAccent: 'craft.', heroDescription: 'Build your hospitality career with Kitchen Master.', sections: [{ eyebrow:'Work with us',heading:'Hospitality starts with people.',body:'We look for thoughtful teammates who care about craft, move with purpose, and make every guest feel welcome.' }], formConfig: { formEyebrow:'Join the team', formTitle:'Apply to {{location}}.', formDescription:'Choose your restaurant and tell us where you shine.', submitLabel:'Submit application' }, sortOrder: 5 },
   { title: 'Franchise Opportunities', slug: 'franchise', pageType: 'franchise', heroEyebrow: 'Franchise opportunities', heroTitle: 'Grow with', heroAccent: 'Kitchen Master.', heroDescription: 'We are exploring thoughtful growth with experienced operators who value hospitality, consistency, and craft.', sections: [
     { eyebrow:'The right partnership',heading:'Built for hands-on operators.',body:'We are interested in partners who understand their market, care deeply about guest experience, and are ready to protect the standards behind every Kitchen Master meal.' },
     { eyebrow:'Start the conversation',heading:'Tell us where you want to grow.',body:'Share your target market, operating background, and investment readiness. Submitting an inquiry does not guarantee territory availability or approval; our team will follow up when there may be a fit.' },
@@ -601,39 +603,88 @@ export default {
         title:'Roasted Konbu and Black Sesame Salmon Carpaccio',
         slug:'roasted-konbu-black-sesame-salmon-carpaccio',
         eyebrow:'Suwanee weekly special',
-        summary:'Fresh salmon, thinly sliced and finished with roasted konbu and black sesame.',
-        details:'A clean, umami-forward starter with subtle nuttiness, designed as a light first course or shared plate.',
+        summary:'Thinly sliced fresh salmon paired with roasted konbu, black sesame, and delicate garnishes.',
+        details:'Clean umami and subtle nuttiness make this a light but satisfying starter for the table.',
+        imageFile:'salmon-carpaccio-special.png',
         sortOrder:10,
       },
       {
         title:'Whole Grilled Yuzu-Ponzu Branzino with Lemongrass Oil',
         slug:'whole-grilled-yuzu-ponzu-branzino',
         eyebrow:'Suwanee weekly special',
-        summary:'Whole grilled branzino glazed with yuzu-ponzu and finished with fragrant lemongrass oil.',
-        details:'Bright citrus and aromatic lemongrass balance the richness of the fish for a centerpiece-worthy main.',
+        summary:'Whole branzino grilled to bring out its natural sweetness, then finished with yuzu-ponzu glaze.',
+        details:'Fragrant lemongrass oil adds a bright citrus lift to this balanced, centerpiece-worthy main.',
+        imageFile:'branzino-special.png',
         sortOrder:20,
       },
     ];
     if (suwanee) {
       for (const special of suwaneeSpecials) {
-        const existing = await strapi.documents('api::happening.happening').findFirst({ filters: { slug: special.slug } });
+        const { imageFile, ...specialData } = special;
+        const image = await cmsImage(imageFile);
+        const existing = await strapi.documents('api::happening.happening').findFirst({ filters: { slug: special.slug }, populate: ['image'] });
         if (!existing) {
           await strapi.documents('api::happening.happening').create({
             data: {
-              ...special,
+              ...specialData,
               happeningType:'special',
               enabled:true,
               featured:true,
               schedule:'Available now',
               locations:[suwanee.documentId],
-              buttonLabel:'View weekly specials',
-              buttonUrl:'https://www.kitchenmasterga.com/weekly-specials-suwanee-ga',
+              ...(image ? { image } : {}),
               showInBanner:false,
               priority:50,
             } as any,
             status:'published',
           });
+        } else {
+          const legacyCopy = existing.summary === 'Fresh salmon, thinly sliced and finished with roasted konbu and black sesame.'
+            || existing.summary === 'Whole grilled branzino glazed with yuzu-ponzu and finished with fragrant lemongrass oil.';
+          if (existing.image && existing.buttonUrl !== 'https://www.kitchenmasterga.com/weekly-specials-suwanee-ga' && !legacyCopy) continue;
+          await strapi.documents('api::happening.happening').update({
+            documentId: existing.documentId,
+            data: {
+              ...(!existing.image && image ? { image } : {}),
+              ...(existing.buttonUrl === 'https://www.kitchenmasterga.com/weekly-specials-suwanee-ga' ? { buttonLabel:null, buttonUrl:null } : {}),
+              ...(legacyCopy ? { summary:specialData.summary, details:specialData.details } : {}),
+            } as any,
+            status:'published',
+          });
         }
+      }
+
+      const halloweenSlug = 'sample-halloween-dumpling-night-2026';
+      const halloween = await strapi.documents('api::happening.happening').findFirst({ filters: { slug: halloweenSlug } });
+      if (!halloween) {
+        await strapi.documents('api::happening.happening').create({
+          data: {
+            title:'Halloween Dumpling Night (Demo)',
+            slug:halloweenSlug,
+            happeningType:'event',
+            enabled:true,
+            featured:true,
+            eyebrow:'Sample event · Suwanee',
+            summary:'Costumes welcome, with seasonal bites, cocktails, and a few spooky surprises.',
+            details:'This sample event demonstrates how an upcoming happening appears in the calendar and dismissible announcement banner. Edit or replace it in Strapi when event details are confirmed.',
+            startsAt:'2026-10-31T21:00:00.000Z',
+            endsAt:'2026-11-01T02:00:00.000Z',
+            schedule:'October 31 · 5–10 PM',
+            locations:[suwanee.documentId],
+            buttonLabel:'View event',
+            showInBanner:true,
+            dismissalKey:'halloween-suwanee-2026',
+            priority:80,
+            sortOrder:1,
+          } as any,
+          status:'published',
+        });
+      } else if (halloween.buttonUrl === '/pages/happenings') {
+        await strapi.documents('api::happening.happening').update({
+          documentId:halloween.documentId,
+          data:{ buttonUrl:null } as any,
+          status:'published',
+        });
       }
     }
   },
