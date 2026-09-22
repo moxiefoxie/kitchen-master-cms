@@ -194,3 +194,19 @@ export const DRINK_CATEGORIES: MenuCategory[] = [
   ]},
 ];
 
+export const HAPPY_HOUR_CATEGORIES: MenuCategory[] = [
+  { name: "Bites", note: "A small selection from the current dinner menu", items: [
+    { name: "Sea Salt Edamame", price: "7", description: "Edamame · sea salt · black pepper", tags: ["V"] },
+    { name: "Scallion Pancake", price: "7", description: "Flaky scallion pastry", tags: ["V"] },
+    { name: "Crab Rangoon", price: "9", description: "5 pc · cream cheese · imitation crab · sweet & sour" },
+    { name: "Yuzu Parmesan Truffle Fries", price: "11", description: "Parmesan · truffle oil · furikake" },
+    { name: "Taiwanese Chicken Bites", price: "11", description: "Crispy chicken · Thai basil · house salt & pepper" },
+  ]},
+  { name: "Sips", note: "Current bar selections", items: [
+    { name: "Sapporo", price: "6 / 7.5", description: "Bottle / draft" },
+    { name: "House Sake", price: "8.5", description: "8 oz bottle" },
+    { name: "Flavored Mojito", price: "9", description: "Mint · lime · strawberry, peach, mango, guava, classic, or lychee +1" },
+    { name: "Yuzu Sake Mojito", price: "14", description: "Sake · yuzu · mint · lime · soda" },
+    { name: "Oolong Whisperer", price: "15", description: "Hendrick’s · house oolong syrup · lemon · soda" },
+  ]},
+];

@@ -1,5 +1,5 @@
 import type { Core } from '@strapi/strapi';
-import { DRINK_CATEGORIES, MENU_CATEGORIES } from './seed/menuData';
+import { DRINK_CATEGORIES, HAPPY_HOUR_CATEGORIES, MENU_CATEGORIES } from './seed/menuData';
 import { existsSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -412,6 +412,22 @@ export default {
             status: 'published',
           });
         }
+      }
+    }
+
+    for (const [categoryIndex, menu] of HAPPY_HOUR_CATEGORIES.entries()) {
+      const slug = `happy-hour-${menu.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
+      const existing = await strapi.documents('api::menu-category.menu-category').findFirst({ filters: { slug } });
+      if (existing) continue;
+      const category = await strapi.documents('api::menu-category.menu-category').create({
+        data: { name: menu.name, slug, menuType: 'happy-hour', note: menu.note, sortOrder: 100 + categoryIndex },
+        status: 'published',
+      });
+      for (const [itemIndex, item] of menu.items.entries()) {
+        await strapi.documents('api::menu-item.menu-item').create({
+          data: { name:item.name, price:item.price, description:item.description, tags:item.tags ?? [], sortOrder:itemIndex + 1, category:category.documentId },
+          status: 'published',
+        });
       }
     }
 
