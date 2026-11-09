@@ -3,7 +3,9 @@ import type { Context } from 'koa';
 export default {
   async index(ctx: Context) {
     const requestedPreview = ctx.query.preview === '1';
-    const validPreview = requestedPreview && ctx.query.previewSecret === process.env.PREVIEW_SECRET;
+    const validPreview = requestedPreview && Boolean(process.env.PREVIEW_SECRET) && ctx.query.previewSecret === process.env.PREVIEW_SECRET;
+    if (requestedPreview && !validPreview) { ctx.status = 401; ctx.body = { error: 'Invalid preview secret' }; return; }
+    if (validPreview) ctx.set('Cache-Control', 'private, no-store');
     const status = validPreview ? 'draft' : 'published';
     const [locations, settings, menuCategories, pages, homepageSections, campaigns, happenings] = await Promise.all([
       strapi.documents('api::location.location').findMany({
@@ -20,7 +22,7 @@ export default {
         populate: {
           items: {
             sort: ['sortOrder:asc'],
-            populate: { allergens: { sort: ['sortOrder:asc'] }, locations: true },
+            populate: { allergens: { sort: ['sortOrder:asc'] }, locations: true, image: true },
           },
           locations: true,
         },
@@ -29,9 +31,9 @@ export default {
         status,
         sort: ['sortOrder:asc'],
         limit: 100,
-        populate: ['location', 'heroImage', 'socialImage'],
+        populate: ['location', 'locations', 'heroImage', 'socialImage'],
       }),
-      strapi.documents('api::homepage-section.homepage-section').findMany({ status, sort: ['sortOrder:asc'], limit: 100, populate: ['location', 'image', 'images'] }),
+      strapi.documents('api::homepage-section.homepage-section').findMany({ status, sort: ['sortOrder:asc'], limit: 100, populate: ['location', 'locations', 'image', 'images'] }),
       strapi.documents('api::campaign.campaign').findMany({ status, sort: ['priority:desc'], limit: 100, populate: ['locations', 'image'] }),
       strapi.documents('api::happening.happening').findMany({ status, sort: ['featured:desc', 'priority:desc', 'sortOrder:asc'], limit: 100, populate: ['locations', 'image'] }),
     ]);

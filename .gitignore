@@ -82,6 +82,7 @@ ssl
 nbproject
 public/uploads/*
 !public/uploads/.gitkeep
+!public/uploads/demo-drink.png
 !public/uploads/hero_d0cafda107.png
 !public/uploads/soup_dumplings_835fe4bef2.png
 !public/uploads/lamb_chop_14e3c3c255.png
@@ -132,6 +133,8 @@ coverage
 ############################
 
 .env
+.env.*
+!.env.example
 license.txt
 exports
 .strapi

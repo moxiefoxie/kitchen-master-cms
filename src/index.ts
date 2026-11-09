@@ -3,7 +3,7 @@ import { DRINK_CATEGORIES, HAPPY_HOUR_CATEGORIES, MENU_CATEGORIES } from './seed
 import { existsSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const TEST_CONTACT_EMAIL = 'switham.gca@gmail.com';
+const TEST_CONTACT_EMAIL = 'savannah@andrewandsavannahconsulting.com';
 const LEGACY_CONTACT_EMAIL = 'Management@kitchenmasterga.com';
 const DEFAULT_HIRING_ROLES = [
   'Front of house', 'Server', 'Bartender', 'Host', 'Kitchen', 'Sushi chef', 'Management', 'Other',
@@ -37,14 +37,15 @@ const SEEDED_ITEM_ALLERGENS: Record<string, string[]> = {
 };
 const OWNER_LIST_LAYOUTS: Record<string, string[]> = {
   'api::allergen.allergen': ['name', 'shortLabel', 'sortOrder'],
-  'api::menu-item.menu-item': ['name', 'restaurantScope', 'category', 'allergens'],
-  'api::menu-category.menu-category': ['name', 'menuType', 'restaurantScope', 'sortOrder'],
-  'api::happening.happening': ['title', 'happeningType', 'restaurantScope', 'enabled'],
-  'api::campaign.campaign': ['name', 'restaurantScope', 'enabled', 'startsAt'],
-  'api::homepage-section.homepage-section': ['name', 'sectionKey', 'restaurantScope', 'sortOrder'],
-  'api::site-page.site-page': ['title', 'pageType', 'restaurantScope', 'sortOrder'],
+  'api::menu-item.menu-item': ['name', 'locations', 'category', 'allergens'],
+  'api::menu-category.menu-category': ['name', 'menuType', 'locations', 'sortOrder'],
+  'api::happening.happening': ['title', 'happeningType', 'locations', 'enabled'],
+  'api::campaign.campaign': ['name', 'locations', 'enabled', 'startsAt'],
+  'api::homepage-section.homepage-section': ['name', 'sectionKey', 'locations', 'sortOrder'],
+  'api::site-page.site-page': ['title', 'pageType', 'locations', 'sortOrder'],
 };
 const SEED_MEDIA_FILES: Record<string, string> = {
+  'demo-drink.png': 'demo-drink.png',
   'hero.png': 'hero_d0cafda107.png',
   'soup-dumplings.png': 'soup_dumplings_835fe4bef2.png',
   'lamb-chop.png': 'lamb_chop_14e3c3c255.png',
@@ -89,17 +90,24 @@ const locations = [
     ],
     contactEmail: TEST_CONTACT_EMAIL, privateDiningEmail: TEST_CONTACT_EMAIL,
     hiringEmail: TEST_CONTACT_EMAIL, hiringRoles: DEFAULT_HIRING_ROLES,
-    reservationUrl: 'https://www.kitchenmasterbistro.com/reservations-frisco',
+    reservationUrl: 'https://resy.com/cities/frisco-tx/venues/kitchen-master-frisco',
     orderUrl: 'https://order.toasttab.com/online/kitchen-master-bistro-9285-preston-rd', sortOrder: 2,
   },
   {
     name: 'Southlake', slug: 'southlake', state: 'Texas', address: '3311 E State Hwy 114',
     city: 'Southlake, TX 76092', phone: '214-724-5600', latitude: 32.9369978,
     longitude: -97.1029086, locationStatus: 'open', hours: 'Tue–Thu 11–9 · Fri–Sat 11–10',
-    instagramUrl: 'https://www.instagram.com/kitchenmaster.tx/',
+    instagramUrl: 'https://www.instagram.com/kitchenmaster.southlake/',
+    googleReviewsUrl: 'https://maps.google.com/?cid=264549353339550442',
+    // Verified on this Google listing on 2026-11-09; curated excerpts, editable in CMS.
+    googleRating: 4.6, googleReviewCount: '105 Google reviews',
+    reviews: [
+      { quote: 'Everything was amazing, you really can’t go wrong!', author: 'Riya Patel · Google', rating: 5 },
+      { quote: 'Great food & atmosphere! We loved it here!', author: 'julitza arvizu · Google', rating: 5 },
+    ],
     contactEmail: TEST_CONTACT_EMAIL, privateDiningEmail: TEST_CONTACT_EMAIL,
     hiringEmail: TEST_CONTACT_EMAIL, hiringRoles: DEFAULT_HIRING_ROLES,
-    reservationUrl: 'tel:+12147245600',
+    reservationUrl: 'https://resy.com/cities/southlake-tx/venues/kitchen-master-southlake',
     orderUrl: 'https://order.toasttab.com/online/kitchen-master-bistro-southlake-3311-w-state-hwy-114', sortOrder: 3,
   },
   {
@@ -719,7 +727,7 @@ export default {
       for (const item of Array.isArray(category.items) ? category.items : []) {
         const updates: Record<string, unknown> = {};
         const seededAllergens = allergensFor(item.name);
-        if (seededAllergens.length > 0 && (!Array.isArray(item.allergens) || item.allergens.length === 0)) {
+        if (!item.allergensReviewed && seededAllergens.length > 0 && (!Array.isArray(item.allergens) || item.allergens.length === 0)) {
           updates.allergens = seededAllergens;
         }
         if (categoryLocationIds.length > 0 && (!Array.isArray(item.locations) || item.locations.length === 0)) {
@@ -853,6 +861,79 @@ export default {
           status:'published',
         });
       }
+    }
+
+    const improvementsStore = strapi.store({ type: 'core', name: 'kitchen-master-content' });
+    if (!await improvementsStore.get({ key: 'menu-media-and-location-links-v1' })) {
+      const exampleImages: Record<string, string> = {
+        'Berkshire Pork': 'soup-dumplings.png',
+        'Chimichurri Lamb Chops': 'lamb-chop.png',
+        'Szechuan Wontons': 'szechuan-wonton.png',
+      };
+      for (const [name, filename] of Object.entries(exampleImages)) {
+        const image = await cmsImage(filename);
+        if (!image) continue;
+        const rows = await strapi.db.query('api::menu-item.menu-item').findMany({ where: { name }, populate: ['image'] });
+        for (const row of rows) {
+          if (!row.image) await strapi.db.query('api::menu-item.menu-item').update({ where: { id: row.id }, data: { image } });
+        }
+      }
+      for (const slug of ['frisco', 'southlake']) {
+        const seed = locations.find((location) => location.slug === slug)!;
+        const rows = await strapi.db.query('api::location.location').findMany({ where: { slug } });
+        for (const row of rows) {
+          const data: Record<string, unknown> = {};
+          if (!row.reservationUrl || ['https://www.kitchenmasterbistro.com/reservations-frisco', 'tel:+12147245600'].includes(row.reservationUrl)) data.reservationUrl = seed.reservationUrl;
+          if (slug === 'southlake') {
+            if (!row.instagramUrl || row.instagramUrl === 'https://www.instagram.com/kitchenmaster.tx/') data.instagramUrl = seed.instagramUrl;
+            if (!row.googleReviewsUrl) data.googleReviewsUrl = 'https://maps.google.com/?cid=264549353339550442';
+          }
+          if (Object.keys(data).length) await strapi.db.query('api::location.location').update({ where: { id: row.id }, data });
+        }
+      }
+      await improvementsStore.set({ key: 'menu-media-and-location-links-v1', value: true });
+    }
+
+    // Owner-requested demo photography for the opening food and drink tabs.
+    // Run once, fill empty media fields only, and keep owner replacements intact.
+    if (!await improvementsStore.get({ key: 'opening-menu-demo-images-v1' })) {
+      const foodImages = await Promise.all(['spread.jpg', 'szechuan-wonton.png', 'lamb-chop.png'].map(cmsImage));
+      const drinkImage = await cmsImage('demo-drink.png');
+      if (foodImages.every(Boolean) && drinkImage) {
+        await strapi.db.query('plugin::upload.file').update({
+          where: { id: drinkImage },
+          data: { alternativeText: 'Demo drink photograph', caption: 'Demo placeholder. Replace with the menu item’s own photograph.' },
+        });
+        for (const [name, menuType] of [['Appetizers', 'food'], ['Zero Proof', 'drink']]) {
+          const categories = await strapi.db.query('api::menu-category.menu-category').findMany({ where: { name, menuType } });
+          for (const category of categories) {
+            const items = await strapi.db.query('api::menu-item.menu-item').findMany({
+              where: { category: { id: category.id } }, populate: ['image'], orderBy: { sortOrder: 'asc' },
+            });
+            for (const [index, item] of items.entries()) {
+              if (item.image) continue;
+              await strapi.db.query('api::menu-item.menu-item').update({
+                where: { id: item.id }, data: { image: menuType === 'drink' ? drinkImage : foodImages[index % foodImages.length] },
+              });
+            }
+          }
+        }
+        await improvementsStore.set({ key: 'opening-menu-demo-images-v1', value: true });
+      }
+    }
+
+    if (!await improvementsStore.get({ key: 'southlake-google-review-cards-v1' })) {
+      const seed = locations.find((location) => location.slug === 'southlake')!;
+      const rows = await strapi.db.query('api::location.location').findMany({ where: { slug: 'southlake' } });
+      for (const row of rows) {
+        const data: Record<string, unknown> = {};
+        if (row.googleRating == null) data.googleRating = seed.googleRating;
+        if (!row.googleReviewCount) data.googleReviewCount = seed.googleReviewCount;
+        if (!Array.isArray(row.reviews) || !row.reviews.length) data.reviews = seed.reviews;
+        if (!row.googleReviewsUrl) data.googleReviewsUrl = seed.googleReviewsUrl;
+        if (Object.keys(data).length) await strapi.db.query('api::location.location').update({ where: { id: row.id }, data });
+      }
+      await improvementsStore.set({ key: 'southlake-google-review-cards-v1', value: true });
     }
 
     // Existing rows predate the filter-friendly enum. Fill only blank scopes so future owner choices are never overwritten.

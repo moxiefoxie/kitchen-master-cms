@@ -34,20 +34,36 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Admin => 
     enabled: true,
     config: {
       allowedOrigins: [frontendUrl],
-      handler(uid, { documentId, status }) {
-        const supported = [
-          'api::location.location',
-          'api::menu-category.menu-category',
-          'api::menu-item.menu-item',
-          'api::site-page.site-page',
-          'api::site-setting.site-setting',
-        ];
-        if (!supported.includes(uid)) return null;
-        const url = new URL(frontendUrl);
-        if (uid === 'api::site-page.site-page') url.pathname = `/pages/${documentId}`;
-        url.searchParams.set('preview', '1');
-        url.searchParams.set('contentType', uid);
-        url.searchParams.set('documentId', documentId);
+      async handler(uid, { documentId, status }) {
+        const supported = ['location', 'menu-category', 'menu-item', 'site-page', 'site-setting', 'homepage-section', 'happening', 'campaign'];
+        const type = uid.split('::')[1]?.split('.')[0];
+        if (!supported.includes(type)) return null;
+        const populate = type === 'location' || type === 'site-setting' ? []
+          : type === 'menu-item' ? ['locations', 'category']
+          : ['site-page', 'homepage-section'].includes(type) ? ['location', 'locations'] : ['locations'];
+        const entry = await strapi.documents(uid as any).findOne({ documentId, status: status ?? 'draft', populate } as any) as any;
+        if (!entry) return null;
+        const scope = entry.restaurantScope;
+        const location = type === 'location' ? entry.slug : entry.locations?.[0]?.slug || entry.location?.slug
+          || (scope && !['all', 'multiple'].includes(scope) ? scope : 'suwanee');
+        const target = new URL(frontendUrl);
+        target.searchParams.set('location', location);
+        if (type === 'site-page' && entry.pageType !== 'home') {
+          target.pathname = entry.pageType === 'careers' ? `/careers/${location}` : `/pages/${entry.slug}`;
+        }
+        if (type === 'menu-category' || type === 'menu-item') {
+          const category = type === 'menu-item' ? entry.category : entry;
+          target.hash = category?.menuType === 'drink' ? 'drinks' : category?.menuType === 'happy-hour' ? 'happy-hour' : 'full-menu';
+          if (category?.name) target.searchParams.set('category', category.name);
+        }
+        if (type === 'homepage-section') {
+          const anchors: Record<string, string> = { 'food-menu': 'full-menu', 'featured-menu': 'menu', 'social-proof': 'reviews', 'connect': 'contact' };
+          target.hash = anchors[entry.sectionKey] || entry.sectionKey;
+        }
+        if (type === 'happening') target.pathname = entry.happeningType === 'special' ? '/pages/specials' : '/pages/happenings';
+        const url = new URL('/api/preview', frontendUrl);
+        url.searchParams.set('secret', env('PREVIEW_SECRET', ''));
+        url.searchParams.set('path', `${target.pathname}${target.search}${target.hash}`);
         url.searchParams.set('status', status ?? 'draft');
         return url.toString();
       },

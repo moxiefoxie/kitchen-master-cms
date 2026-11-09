@@ -5,7 +5,7 @@
     "singularName": "menu-item",
     "pluralName": "menu-items",
     "displayName": "Menu Item",
-    "description": "Food, drink, and happy-hour items. Use the Restaurant dropdown to control and filter where each item appears."
+    "description": "Food, drink, and happy-hour items. Select one or more Locations to control where each item appears."
   },
   "options": { "draftAndPublish": true },
   "attributes": {
@@ -13,9 +13,11 @@
     "price": { "type": "string", "required": true },
     "description": { "type": "text" },
     "tags": { "type": "json" },
+    "image": {"type": "media", "multiple": false, "allowedTypes": ["images"]},
+    "allergensReviewed": {"type": "boolean", "default": false, "description": "Optional internal verification flag. Website filters use the assigned allergens directly."},
     "allergens": { "type": "relation", "relation": "manyToMany", "target": "api::allergen.allergen", "inversedBy": "items", "description": "Select every major allergen confirmed for this item. These selections appear as icons on the website." },
-    "restaurantScope": { "type": "enumeration", "enum": ["all", "suwanee", "frisco", "southlake", "midtown", "multiple"], "default": "all", "required": true, "description": "Controls website visibility and provides dropdown filtering. Choose all for every restaurant; choose multiple only when Locations contains more than one restaurant." },
-    "locations": { "type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Only required when Restaurant is multiple. Otherwise the Restaurant dropdown controls visibility." },
+    "restaurantScope": {"type": "enumeration", "enum": ["all", "suwanee", "frisco", "southlake", "midtown", "multiple"], "default": "all", "required": true, "description": "Legacy scope used only when Locations is empty. Prefer selecting restaurants in Locations."},
+    "locations": {"type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Select one or more restaurants. Selected restaurants take precedence over the legacy Restaurant scope. Leave empty with scope all to share everywhere."},
     "sortOrder": { "type": "integer", "default": 0 },
     "category": { "type": "relation", "relation": "manyToOne", "target": "api::menu-category.menu-category", "inversedBy": "items" }
   },

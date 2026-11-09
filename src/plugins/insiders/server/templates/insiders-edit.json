@@ -1,0 +1,714 @@
+[
+  {
+    "templateReferenceId": 1003,
+    "name": "Kitchen Master — The Insiders Edit",
+    "subject": "A little more to look forward to at Kitchen Master",
+    "category": "marketing",
+    "isActive": true,
+    "tags": [
+      "insiders",
+      "newsletter",
+      "reusable"
+    ],
+    "design": {
+      "counters": {
+        "u_row": 7,
+        "u_column": 14,
+        "u_content_text": 5,
+        "u_content_image": 1,
+        "u_content_button": 1
+      },
+      "body": {
+        "id": "km_body",
+        "rows": [
+          {
+            "id": "km_row_1",
+            "cells": [
+              1
+            ],
+            "columns": [
+              {
+                "id": "km_col_1",
+                "contents": [
+                  {
+                    "id": "km_content_1",
+                    "type": "text",
+                    "values": {
+                      "containerPadding": "32px 32px",
+                      "anchor": "",
+                      "fontFamily": {
+                        "label": "Georgia",
+                        "value": "georgia,palatino"
+                      },
+                      "fontSize": "16px",
+                      "color": "#171513",
+                      "textAlign": "left",
+                      "lineHeight": "170%",
+                      "linkStyle": {
+                        "inherit": false,
+                        "linkColor": "#882020",
+                        "linkHoverColor": "#0000ee",
+                        "linkUnderline": true,
+                        "linkHoverUnderline": true
+                      },
+                      "hideDesktop": false,
+                      "displayCondition": null,
+                      "_styleGuide": null,
+                      "_meta": {
+                        "htmlID": "km_content_1",
+                        "htmlClassNames": "u_content_text"
+                      },
+                      "selectable": true,
+                      "draggable": true,
+                      "duplicatable": true,
+                      "deletable": true,
+                      "hideable": true,
+                      "locked": false,
+                      "text": "<p style=\"margin:0;color:#ffffff;font:700 20px/1.3 Georgia,serif;letter-spacing:3px\">KITCHEN MASTER</p><p style=\"margin:10px 0 0;color:#d6c8ba;font:11px/1.5 Arial,sans-serif;letter-spacing:3px\">THE INSIDERS EDIT</p>"
+                    }
+                  }
+                ],
+                "values": {
+                  "backgroundColor": "",
+                  "padding": "0px",
+                  "border": {},
+                  "_meta": {
+                    "htmlID": "u_column_8",
+                    "htmlClassNames": "u_column"
+                  },
+                  "deletable": true
+                }
+              }
+            ],
+            "values": {
+              "displayCondition": null,
+              "columns": false,
+              "_styleGuide": null,
+              "backgroundColor": "",
+              "columnsBackgroundColor": "#171513",
+              "backgroundImage": {
+                "url": "",
+                "fullWidth": true,
+                "repeat": "no-repeat",
+                "size": "custom",
+                "position": "center"
+              },
+              "padding": "0px",
+              "anchor": "",
+              "hideDesktop": false,
+              "_meta": {
+                "htmlID": "km_row_1",
+                "htmlClassNames": "u_row"
+              },
+              "selectable": true,
+              "draggable": true,
+              "duplicatable": true,
+              "deletable": true,
+              "hideable": true,
+              "locked": false
+            }
+          },
+          {
+            "id": "km_row_2",
+            "cells": [
+              1
+            ],
+            "columns": [
+              {
+                "id": "km_col_2",
+                "contents": [
+                  {
+                    "id": "km_content_2",
+                    "type": "text",
+                    "values": {
+                      "containerPadding": "36px 32px 30px",
+                      "anchor": "",
+                      "fontFamily": {
+                        "label": "Georgia",
+                        "value": "georgia,palatino"
+                      },
+                      "fontSize": "16px",
+                      "color": "#171513",
+                      "textAlign": "left",
+                      "lineHeight": "170%",
+                      "linkStyle": {
+                        "inherit": false,
+                        "linkColor": "#882020",
+                        "linkHoverColor": "#0000ee",
+                        "linkUnderline": true,
+                        "linkHoverUnderline": true
+                      },
+                      "hideDesktop": false,
+                      "displayCondition": null,
+                      "_styleGuide": null,
+                      "_meta": {
+                        "htmlID": "km_content_2",
+                        "htmlClassNames": "u_content_text"
+                      },
+                      "selectable": true,
+                      "draggable": true,
+                      "duplicatable": true,
+                      "deletable": true,
+                      "hideable": true,
+                      "locked": false,
+                      "text": "<p style=\"margin:0 0 16px;color:#882020;font:700 10px/1.5 Arial,sans-serif;letter-spacing:2px\">GOOD FOOD. GOOD COMPANY.</p><h1 style=\"margin:0;color:#171513;font:400 42px/1.1 Georgia,serif\">A little more<br><em style=\"color:#882020\">to look forward to.</em></h1><p style=\"margin:22px 0 0;color:#5e5851;font:17px/1.7 Georgia,serif\">Pull up a chair. Here’s a little inspiration for your next visit, from our kitchen to your inbox.</p>"
+                    }
+                  }
+                ],
+                "values": {
+                  "backgroundColor": "",
+                  "padding": "0px",
+                  "border": {},
+                  "_meta": {
+                    "htmlID": "u_column_9",
+                    "htmlClassNames": "u_column"
+                  },
+                  "deletable": true
+                }
+              }
+            ],
+            "values": {
+              "displayCondition": null,
+              "columns": false,
+              "_styleGuide": null,
+              "backgroundColor": "",
+              "columnsBackgroundColor": "#f5f1e9",
+              "backgroundImage": {
+                "url": "",
+                "fullWidth": true,
+                "repeat": "no-repeat",
+                "size": "custom",
+                "position": "center"
+              },
+              "padding": "0px",
+              "anchor": "",
+              "hideDesktop": false,
+              "_meta": {
+                "htmlID": "km_row_2",
+                "htmlClassNames": "u_row"
+              },
+              "selectable": true,
+              "draggable": true,
+              "duplicatable": true,
+              "deletable": true,
+              "hideable": true,
+              "locked": false
+            }
+          },
+          {
+            "id": "km_row_3",
+            "cells": [
+              1
+            ],
+            "columns": [
+              {
+                "id": "km_col_3",
+                "contents": [
+                  {
+                    "id": "km_content_3",
+                    "type": "image",
+                    "values": {
+                      "containerPadding": "0px",
+                      "anchor": "",
+                      "src": {
+                        "url": "https://images.squarespace-cdn.com/content/v1/623297d8620f8279b779d127/80aaf7f6-15e1-4522-ba9b-21485db6b3c0/XLB%2B%7C%2BPork.png?format=750w",
+                        "width": 600,
+                        "height": 400
+                      },
+                      "textAlign": "center",
+                      "altText": "Kitchen Master pork soup dumplings",
+                      "action": {
+                        "name": "web",
+                        "values": {
+                          "href": "",
+                          "target": "_blank"
+                        }
+                      },
+                      "hideDesktop": false,
+                      "displayCondition": null,
+                      "_styleGuide": null,
+                      "_meta": {
+                        "htmlID": "km_content_3",
+                        "htmlClassNames": "u_content_image"
+                      },
+                      "selectable": true,
+                      "draggable": true,
+                      "duplicatable": true,
+                      "deletable": true,
+                      "hideable": true,
+                      "locked": false,
+                      "fullWidth": true
+                    }
+                  }
+                ],
+                "values": {
+                  "backgroundColor": "",
+                  "padding": "0px",
+                  "border": {},
+                  "_meta": {
+                    "htmlID": "u_column_10",
+                    "htmlClassNames": "u_column"
+                  },
+                  "deletable": true
+                }
+              }
+            ],
+            "values": {
+              "displayCondition": null,
+              "columns": false,
+              "_styleGuide": null,
+              "backgroundColor": "",
+              "columnsBackgroundColor": "#f5f1e9",
+              "backgroundImage": {
+                "url": "",
+                "fullWidth": true,
+                "repeat": "no-repeat",
+                "size": "custom",
+                "position": "center"
+              },
+              "padding": "0px",
+              "anchor": "",
+              "hideDesktop": false,
+              "_meta": {
+                "htmlID": "km_row_3",
+                "htmlClassNames": "u_row"
+              },
+              "selectable": true,
+              "draggable": true,
+              "duplicatable": true,
+              "deletable": true,
+              "hideable": true,
+              "locked": false
+            }
+          },
+          {
+            "id": "km_row_4",
+            "cells": [
+              1
+            ],
+            "columns": [
+              {
+                "id": "km_col_4",
+                "contents": [
+                  {
+                    "id": "km_content_4",
+                    "type": "text",
+                    "values": {
+                      "containerPadding": "30px 32px",
+                      "anchor": "",
+                      "fontFamily": {
+                        "label": "Georgia",
+                        "value": "georgia,palatino"
+                      },
+                      "fontSize": "16px",
+                      "color": "#171513",
+                      "textAlign": "left",
+                      "lineHeight": "170%",
+                      "linkStyle": {
+                        "inherit": false,
+                        "linkColor": "#882020",
+                        "linkHoverColor": "#0000ee",
+                        "linkUnderline": true,
+                        "linkHoverUnderline": true
+                      },
+                      "hideDesktop": false,
+                      "displayCondition": null,
+                      "_styleGuide": null,
+                      "_meta": {
+                        "htmlID": "km_content_4",
+                        "htmlClassNames": "u_content_text"
+                      },
+                      "selectable": true,
+                      "draggable": true,
+                      "duplicatable": true,
+                      "deletable": true,
+                      "hideable": true,
+                      "locked": false,
+                      "text": "<p style=\"margin:0 0 12px;color:#882020;font:700 10px/1.5 Arial,sans-serif;letter-spacing:2px\">IN THE SPOTLIGHT</p><h2 style=\"margin:0 0 16px;color:#171513;font:400 30px/1.2 Georgia,serif\">Small dumplings.<br>Something special inside.</h2><p style=\"margin:0;color:#5e5851;font:16px/1.7 Georgia,serif\">Our signature soup dumplings are made for the first bite, the shared plate, and the meal you’ll want to come back for.</p>"
+                    }
+                  }
+                ],
+                "values": {
+                  "backgroundColor": "",
+                  "padding": "0px",
+                  "border": {},
+                  "_meta": {
+                    "htmlID": "u_column_11",
+                    "htmlClassNames": "u_column"
+                  },
+                  "deletable": true
+                }
+              }
+            ],
+            "values": {
+              "displayCondition": null,
+              "columns": false,
+              "_styleGuide": null,
+              "backgroundColor": "",
+              "columnsBackgroundColor": "#fffdf9",
+              "backgroundImage": {
+                "url": "",
+                "fullWidth": true,
+                "repeat": "no-repeat",
+                "size": "custom",
+                "position": "center"
+              },
+              "padding": "0px",
+              "anchor": "",
+              "hideDesktop": false,
+              "_meta": {
+                "htmlID": "km_row_4",
+                "htmlClassNames": "u_row"
+              },
+              "selectable": true,
+              "draggable": true,
+              "duplicatable": true,
+              "deletable": true,
+              "hideable": true,
+              "locked": false
+            }
+          },
+          {
+            "id": "km_row_5",
+            "cells": [
+              1
+            ],
+            "columns": [
+              {
+                "id": "km_col_5",
+                "contents": [
+                  {
+                    "id": "km_content_5",
+                    "type": "text",
+                    "values": {
+                      "containerPadding": "30px 32px",
+                      "anchor": "",
+                      "fontFamily": {
+                        "label": "Georgia",
+                        "value": "georgia,palatino"
+                      },
+                      "fontSize": "16px",
+                      "color": "#171513",
+                      "textAlign": "left",
+                      "lineHeight": "170%",
+                      "linkStyle": {
+                        "inherit": false,
+                        "linkColor": "#882020",
+                        "linkHoverColor": "#0000ee",
+                        "linkUnderline": true,
+                        "linkHoverUnderline": true
+                      },
+                      "hideDesktop": false,
+                      "displayCondition": null,
+                      "_styleGuide": null,
+                      "_meta": {
+                        "htmlID": "km_content_5",
+                        "htmlClassNames": "u_content_text"
+                      },
+                      "selectable": true,
+                      "draggable": true,
+                      "duplicatable": true,
+                      "deletable": true,
+                      "hideable": true,
+                      "locked": false,
+                      "text": "<p style=\"margin:0 0 12px;color:#882020;font:700 10px/1.5 Arial,sans-serif;letter-spacing:2px\">AROUND THE TABLE</p><h2 style=\"margin:0 0 16px;color:#171513;font:400 28px/1.2 Georgia,serif\">Make it a gathering.</h2><p style=\"margin:0;color:#5e5851;font:16px/1.7 Georgia,serif\">A catch-up with friends. A family dinner. An occasion worth celebrating. There’s always a reason to share a meal at Kitchen Master.</p>"
+                    }
+                  }
+                ],
+                "values": {
+                  "backgroundColor": "",
+                  "padding": "0px",
+                  "border": {},
+                  "_meta": {
+                    "htmlID": "u_column_12",
+                    "htmlClassNames": "u_column"
+                  },
+                  "deletable": true
+                }
+              }
+            ],
+            "values": {
+              "displayCondition": null,
+              "columns": false,
+              "_styleGuide": null,
+              "backgroundColor": "",
+              "columnsBackgroundColor": "#f5f1e9",
+              "backgroundImage": {
+                "url": "",
+                "fullWidth": true,
+                "repeat": "no-repeat",
+                "size": "custom",
+                "position": "center"
+              },
+              "padding": "0px",
+              "anchor": "",
+              "hideDesktop": false,
+              "_meta": {
+                "htmlID": "km_row_5",
+                "htmlClassNames": "u_row"
+              },
+              "selectable": true,
+              "draggable": true,
+              "duplicatable": true,
+              "deletable": true,
+              "hideable": true,
+              "locked": false
+            }
+          },
+          {
+            "id": "km_row_6",
+            "cells": [
+              1
+            ],
+            "columns": [
+              {
+                "id": "km_col_6",
+                "contents": [
+                  {
+                    "id": "km_content_6",
+                    "type": "button",
+                    "values": {
+                      "href": {
+                        "name": "web",
+                        "values": {
+                          "href": "https://www.kitchenmasterbistro.com/",
+                          "target": "_blank"
+                        }
+                      },
+                      "buttonColors": {
+                        "color": "#ffffff",
+                        "backgroundColor": "#882020",
+                        "hoverColor": "#ffffff",
+                        "hoverBackgroundColor": "#6b1818"
+                      },
+                      "size": {
+                        "autoWidth": true,
+                        "width": "100%"
+                      },
+                      "fontFamily": {
+                        "label": "Arial",
+                        "value": "arial,helvetica,sans-serif"
+                      },
+                      "fontSize": "13px",
+                      "lineHeight": "120%",
+                      "textAlign": "left",
+                      "padding": "16px 24px",
+                      "border": {},
+                      "borderRadius": "0px",
+                      "hideDesktop": false,
+                      "displayCondition": null,
+                      "_styleGuide": null,
+                      "containerPadding": "0px 32px 36px",
+                      "anchor": "",
+                      "_meta": {
+                        "htmlID": "km_content_6",
+                        "htmlClassNames": "u_content_button"
+                      },
+                      "selectable": true,
+                      "draggable": true,
+                      "duplicatable": true,
+                      "deletable": true,
+                      "hideable": true,
+                      "locked": false,
+                      "text": "Plan your next visit"
+                    }
+                  }
+                ],
+                "values": {
+                  "backgroundColor": "",
+                  "padding": "0px",
+                  "border": {},
+                  "_meta": {
+                    "htmlID": "u_column_13",
+                    "htmlClassNames": "u_column"
+                  },
+                  "deletable": true
+                }
+              }
+            ],
+            "values": {
+              "displayCondition": null,
+              "columns": false,
+              "_styleGuide": null,
+              "backgroundColor": "",
+              "columnsBackgroundColor": "#f5f1e9",
+              "backgroundImage": {
+                "url": "",
+                "fullWidth": true,
+                "repeat": "no-repeat",
+                "size": "custom",
+                "position": "center"
+              },
+              "padding": "0px",
+              "anchor": "",
+              "hideDesktop": false,
+              "_meta": {
+                "htmlID": "km_row_6",
+                "htmlClassNames": "u_row"
+              },
+              "selectable": true,
+              "draggable": true,
+              "duplicatable": true,
+              "deletable": true,
+              "hideable": true,
+              "locked": false
+            }
+          },
+          {
+            "id": "km_row_7",
+            "cells": [
+              1
+            ],
+            "columns": [
+              {
+                "id": "km_col_7",
+                "contents": [
+                  {
+                    "id": "km_content_7",
+                    "type": "text",
+                    "values": {
+                      "containerPadding": "25px 32px",
+                      "anchor": "",
+                      "fontFamily": {
+                        "label": "Georgia",
+                        "value": "georgia,palatino"
+                      },
+                      "fontSize": "16px",
+                      "color": "#171513",
+                      "textAlign": "left",
+                      "lineHeight": "170%",
+                      "linkStyle": {
+                        "inherit": false,
+                        "linkColor": "#882020",
+                        "linkHoverColor": "#0000ee",
+                        "linkUnderline": true,
+                        "linkHoverUnderline": true
+                      },
+                      "hideDesktop": false,
+                      "displayCondition": null,
+                      "_styleGuide": null,
+                      "_meta": {
+                        "htmlID": "km_content_7",
+                        "htmlClassNames": "u_content_text"
+                      },
+                      "selectable": true,
+                      "draggable": true,
+                      "duplicatable": true,
+                      "deletable": true,
+                      "hideable": true,
+                      "locked": false,
+                      "text": "<p style=\"margin:0;color:#ffffff;font:18px/1.5 Georgia,serif\">Tradition meets innovation.</p><p style=\"margin:10px 0 0;color:#c7c0b7;font:12px/1.6 Arial,sans-serif\">A little closer to the kitchen. A little more to look forward to.</p>"
+                    }
+                  }
+                ],
+                "values": {
+                  "backgroundColor": "",
+                  "padding": "0px",
+                  "border": {},
+                  "_meta": {
+                    "htmlID": "u_column_14",
+                    "htmlClassNames": "u_column"
+                  },
+                  "deletable": true
+                }
+              }
+            ],
+            "values": {
+              "displayCondition": null,
+              "columns": false,
+              "_styleGuide": null,
+              "backgroundColor": "",
+              "columnsBackgroundColor": "#171513",
+              "backgroundImage": {
+                "url": "",
+                "fullWidth": true,
+                "repeat": "no-repeat",
+                "size": "custom",
+                "position": "center"
+              },
+              "padding": "0px",
+              "anchor": "",
+              "hideDesktop": false,
+              "_meta": {
+                "htmlID": "km_row_7",
+                "htmlClassNames": "u_row"
+              },
+              "selectable": true,
+              "draggable": true,
+              "duplicatable": true,
+              "deletable": true,
+              "hideable": true,
+              "locked": false
+            }
+          }
+        ],
+        "headers": [],
+        "footers": [],
+        "values": {
+          "_styleGuide": null,
+          "popupPosition": "center",
+          "popupDisplayDelay": 0,
+          "popupWidth": "600px",
+          "popupHeight": "auto",
+          "borderRadius": "10px",
+          "contentAlign": "center",
+          "contentVerticalAlign": "middle",
+          "contentWidth": "600px",
+          "fontFamily": {
+            "label": "Georgia",
+            "value": "georgia,palatino"
+          },
+          "textColor": "#000000",
+          "popupBackgroundColor": "#FFFFFF",
+          "popupBackgroundImage": {
+            "url": "",
+            "fullWidth": true,
+            "repeat": "no-repeat",
+            "size": "cover",
+            "position": "center"
+          },
+          "popupOverlay_backgroundColor": "rgba(0, 0, 0, 0.1)",
+          "popupCloseButton_position": "top-right",
+          "popupCloseButton_backgroundColor": "#DDDDDD",
+          "popupCloseButton_iconColor": "#000000",
+          "popupCloseButton_borderRadius": "0px",
+          "popupCloseButton_margin": "0px",
+          "popupCloseButton_action": {
+            "name": "close_popup",
+            "attrs": {
+              "onClick": "document.querySelector('.u-popup-container').style.display = 'none';"
+            }
+          },
+          "language": {},
+          "backgroundColor": "#e9e4dc",
+          "documentSize": "A4",
+          "documentOrientation": "portrait",
+          "documentMargin": "auto",
+          "preheaderText": "Good food, good company, and a little inspiration for your next visit.",
+          "linkStyle": {
+            "body": true,
+            "linkColor": "#882020",
+            "linkHoverColor": "#0000ee",
+            "linkUnderline": true,
+            "linkHoverUnderline": true
+          },
+          "backgroundImage": {
+            "url": "",
+            "fullWidth": true,
+            "repeat": "no-repeat",
+            "size": "custom",
+            "position": "center"
+          },
+          "accessibilityTitle": "",
+          "_meta": {
+            "htmlID": "u_body",
+            "htmlClassNames": "u_body"
+          }
+        }
+      },
+      "schemaVersion": 28
+    },
+    "bodyHtml": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional //EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n<head>\n<!--[if gte mso 9]>\n<xml>\n  <o:OfficeDocumentSettings>\n    <o:AllowPNG/>\n    <o:PixelsPerInch>96</o:PixelsPerInch>\n  </o:OfficeDocumentSettings>\n</xml>\n<![endif]-->\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"x-apple-disable-message-reformatting\">\n  <!--[if !mso]><!--><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><!--<![endif]-->\n  \n  \n    <style type=\"text/css\">\n      \n      @media only screen and (min-width: 620px) {\n        .u-row {\n          width: 600px !important;\n        }\n\n        .u-row .u-col {\n          vertical-align: top;\n        }\n\n        \n            .u-row .u-col-100 {\n              width: 600px !important;\n            }\n          \n      }\n\n      @media only screen and (max-width: 620px) {\n        .u-row-container {\n          max-width: 100% !important;\n          padding-left: 0px !important;\n          padding-right: 0px !important;\n        }\n\n        .u-row {\n          width: 100% !important;\n        }\n\n        .u-row .u-col {\n          display: block !important;\n          width: 100% !important;\n          min-width: 320px !important;\n          max-width: 100% !important;\n        }\n\n        .u-row .u-col > div {\n          margin: 0 auto;\n        }\n\n}\n    \nbody{margin:0;padding:0}table,td,tr{border-collapse:collapse;vertical-align:top}p{margin:0}.ie-container table,.mso-container table{table-layout:fixed}*{line-height:inherit}a[x-apple-data-detectors=true]{color:inherit!important;text-decoration:none!important}\n\n\ntable, td { color: #000000; } #u_body a { color: #882020; text-decoration: underline; } @media only screen and (max-width: 620px) { #km_content_3 .v-src-width { width: 100% !important; } #km_content_3 .v-src-max-width { max-width: 100% !important; } }\n    </style>\n  \n  \n\n</head>\n\n<body class=\"clean-body u_body\" style=\"margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #e9e4dc;color: #000000\">\n  <!--[if IE]><div class=\"ie-container\"><![endif]-->\n  <!--[if mso]><div class=\"mso-container\"><![endif]-->\n  <table role=\"presentation\" id=\"u_body\" style=\"border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;min-width: 320px;Margin: 0 auto;background-color: #e9e4dc;width:100%\" cellpadding=\"0\" cellspacing=\"0\">\n  <tbody>\n  <tr>\n    <td style=\"display:none !important;visibility:hidden;mso-hide:all;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;\">\n      Good food, good company, and a little inspiration for your next visit.\n    </td>\n  </tr>\n  \n  <tr style=\"vertical-align: top\">\n    <td style=\"word-break: break-word;border-collapse: collapse !important;vertical-align: top\">\n    <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td align=\"center\" style=\"background-color: #e9e4dc;\" bgcolor=\"#e9e4dc\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"600\" align=\"center\" style=\"border-collapse: collapse;\"><tr><td style=\"padding:0;\"><![endif]-->\n    \n\n\n<div id=\"km_row_1\" class=\"u-row-container\" style=\"padding: 0px;background-color: transparent;\">\n  <div class=\"u-row\" style=\"margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #171513;\">\n    <div style=\"border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;\">\n      <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;background-color: transparent;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#171513\"><tr style=\"background-color: #171513;\"><![endif]-->\n      \n<!--[if (mso)|(IE)]><td align=\"center\" width=\"600\" style=\"width: 600px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\" valign=\"top\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;\"><![endif]-->\n<div class=\"u-col u-col-100\" style=\"max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;\">\n  <div style=\"height: 100%;width: 100% !important;\">\n  <!--[if (!mso)&(!IE)]><!--><div style=\"box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\"><!--<![endif]-->\n  \n<table id=\"km_content_1\" style=\"font-family:georgia,palatino;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:32px 32px;font-family:georgia,palatino;\" align=\"left\">\n        \n  <div style=\"font-family: georgia,palatino; font-size: 16px; color: #171513; line-height: 170%; text-align: left; word-wrap: break-word;\">\n    <p style=\"margin:0;color:#ffffff;font:700 20px/1.3 Georgia,serif;letter-spacing:3px\">KITCHEN MASTER</p><p style=\"margin:10px 0 0;color:#d6c8ba;font:11px/1.5 Arial,sans-serif;letter-spacing:3px\">THE INSIDERS EDIT</p>\n  </div>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->\n  </div>\n</div>\n<!--[if (mso)|(IE)]></td></tr></table></td><![endif]-->\n      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->\n    </div>\n  </div>\n</div>\n\n\n\n\n\n<div id=\"km_row_2\" class=\"u-row-container\" style=\"padding: 0px;background-color: transparent;\">\n  <div class=\"u-row\" style=\"margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #f5f1e9;\">\n    <div style=\"border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;\">\n      <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;background-color: transparent;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#f5f1e9\"><tr style=\"background-color: #f5f1e9;\"><![endif]-->\n      \n<!--[if (mso)|(IE)]><td align=\"center\" width=\"600\" style=\"width: 600px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\" valign=\"top\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;\"><![endif]-->\n<div class=\"u-col u-col-100\" style=\"max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;\">\n  <div style=\"height: 100%;width: 100% !important;\">\n  <!--[if (!mso)&(!IE)]><!--><div style=\"box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\"><!--<![endif]-->\n  \n<table id=\"km_content_2\" style=\"font-family:georgia,palatino;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:36px 32px 30px;font-family:georgia,palatino;\" align=\"left\">\n        \n  <div style=\"font-family: georgia,palatino; font-size: 16px; color: #171513; line-height: 170%; text-align: left; word-wrap: break-word;\">\n    <p style=\"margin:0 0 16px;color:#882020;font:700 10px/1.5 Arial,sans-serif;letter-spacing:2px\">GOOD FOOD. GOOD COMPANY.</p><h1 style=\"margin:0;color:#171513;font:400 42px/1.1 Georgia,serif\">A little more<br><em style=\"color:#882020\">to look forward to.</em></h1><p style=\"margin:22px 0 0;color:#5e5851;font:17px/1.7 Georgia,serif\">Pull up a chair. Here’s a little inspiration for your next visit, from our kitchen to your inbox.</p>\n  </div>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->\n  </div>\n</div>\n<!--[if (mso)|(IE)]></td></tr></table></td><![endif]-->\n      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->\n    </div>\n  </div>\n</div>\n\n\n\n\n\n<div id=\"km_row_3\" class=\"u-row-container\" style=\"padding: 0px;background-color: transparent;\">\n  <div class=\"u-row\" style=\"margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #f5f1e9;\">\n    <div style=\"border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;\">\n      <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;background-color: transparent;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#f5f1e9\"><tr style=\"background-color: #f5f1e9;\"><![endif]-->\n      \n<!--[if (mso)|(IE)]><td align=\"center\" width=\"600\" style=\"width: 600px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\" valign=\"top\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;\"><![endif]-->\n<div class=\"u-col u-col-100\" style=\"max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;\">\n  <div style=\"height: 100%;width: 100% !important;\">\n  <!--[if (!mso)&(!IE)]><!--><div style=\"box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\"><!--<![endif]-->\n  \n<table id=\"km_content_3\" style=\"font-family:georgia,palatino;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:0px;font-family:georgia,palatino;\" align=\"left\">\n        \n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n  <tr>\n    <td style=\"padding-right: 0px;padding-left: 0px;\" align=\"center\">\n      \n      <!--[if mso]><img align=\"center\" border=\"0\" src=\"https://images.squarespace-cdn.com/content/v1/623297d8620f8279b779d127/80aaf7f6-15e1-4522-ba9b-21485db6b3c0/XLB%2B%7C%2BPork.png?format=750w\" alt=\"Kitchen Master pork soup dumplings\" title=\"Kitchen Master pork soup dumplings\" style=\"outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;float: none;\" width=\"600\" height=\"400\" class=\"v-src-width v-src-max-width\"/><![endif]--><!--[if !mso]><!--><img align=\"center\" border=\"0\" src=\"https://images.squarespace-cdn.com/content/v1/623297d8620f8279b779d127/80aaf7f6-15e1-4522-ba9b-21485db6b3c0/XLB%2B%7C%2BPork.png?format=750w\" alt=\"Kitchen Master pork soup dumplings\" title=\"Kitchen Master pork soup dumplings\" style=\"outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;\" width=\"600\" class=\"v-src-width v-src-max-width\"/><!--<![endif]-->\n      \n    </td>\n  </tr>\n</table>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->\n  </div>\n</div>\n<!--[if (mso)|(IE)]></td></tr></table></td><![endif]-->\n      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->\n    </div>\n  </div>\n</div>\n\n\n\n\n\n<div id=\"km_row_4\" class=\"u-row-container\" style=\"padding: 0px;background-color: transparent;\">\n  <div class=\"u-row\" style=\"margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #fffdf9;\">\n    <div style=\"border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;\">\n      <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;background-color: transparent;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#fffdf9\"><tr style=\"background-color: #fffdf9;\"><![endif]-->\n      \n<!--[if (mso)|(IE)]><td align=\"center\" width=\"600\" style=\"width: 600px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\" valign=\"top\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;\"><![endif]-->\n<div class=\"u-col u-col-100\" style=\"max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;\">\n  <div style=\"height: 100%;width: 100% !important;\">\n  <!--[if (!mso)&(!IE)]><!--><div style=\"box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\"><!--<![endif]-->\n  \n<table id=\"km_content_4\" style=\"font-family:georgia,palatino;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:30px 32px;font-family:georgia,palatino;\" align=\"left\">\n        \n  <div style=\"font-family: georgia,palatino; font-size: 16px; color: #171513; line-height: 170%; text-align: left; word-wrap: break-word;\">\n    <p style=\"margin:0 0 12px;color:#882020;font:700 10px/1.5 Arial,sans-serif;letter-spacing:2px\">IN THE SPOTLIGHT</p><h2 style=\"margin:0 0 16px;color:#171513;font:400 30px/1.2 Georgia,serif\">Small dumplings.<br>Something special inside.</h2><p style=\"margin:0;color:#5e5851;font:16px/1.7 Georgia,serif\">Our signature soup dumplings are made for the first bite, the shared plate, and the meal you’ll want to come back for.</p>\n  </div>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->\n  </div>\n</div>\n<!--[if (mso)|(IE)]></td></tr></table></td><![endif]-->\n      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->\n    </div>\n  </div>\n</div>\n\n\n\n\n\n<div id=\"km_row_5\" class=\"u-row-container\" style=\"padding: 0px;background-color: transparent;\">\n  <div class=\"u-row\" style=\"margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #f5f1e9;\">\n    <div style=\"border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;\">\n      <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;background-color: transparent;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#f5f1e9\"><tr style=\"background-color: #f5f1e9;\"><![endif]-->\n      \n<!--[if (mso)|(IE)]><td align=\"center\" width=\"600\" style=\"width: 600px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\" valign=\"top\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;\"><![endif]-->\n<div class=\"u-col u-col-100\" style=\"max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;\">\n  <div style=\"height: 100%;width: 100% !important;\">\n  <!--[if (!mso)&(!IE)]><!--><div style=\"box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\"><!--<![endif]-->\n  \n<table id=\"km_content_5\" style=\"font-family:georgia,palatino;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:30px 32px;font-family:georgia,palatino;\" align=\"left\">\n        \n  <div style=\"font-family: georgia,palatino; font-size: 16px; color: #171513; line-height: 170%; text-align: left; word-wrap: break-word;\">\n    <p style=\"margin:0 0 12px;color:#882020;font:700 10px/1.5 Arial,sans-serif;letter-spacing:2px\">AROUND THE TABLE</p><h2 style=\"margin:0 0 16px;color:#171513;font:400 28px/1.2 Georgia,serif\">Make it a gathering.</h2><p style=\"margin:0;color:#5e5851;font:16px/1.7 Georgia,serif\">A catch-up with friends. A family dinner. An occasion worth celebrating. There’s always a reason to share a meal at Kitchen Master.</p>\n  </div>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->\n  </div>\n</div>\n<!--[if (mso)|(IE)]></td></tr></table></td><![endif]-->\n      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->\n    </div>\n  </div>\n</div>\n\n\n\n\n\n<div id=\"km_row_6\" class=\"u-row-container\" style=\"padding: 0px;background-color: transparent;\">\n  <div class=\"u-row\" style=\"margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #f5f1e9;\">\n    <div style=\"border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;\">\n      <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;background-color: transparent;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#f5f1e9\"><tr style=\"background-color: #f5f1e9;\"><![endif]-->\n      \n<!--[if (mso)|(IE)]><td align=\"center\" width=\"600\" style=\"width: 600px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\" valign=\"top\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;\"><![endif]-->\n<div class=\"u-col u-col-100\" style=\"max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;\">\n  <div style=\"height: 100%;width: 100% !important;\">\n  <!--[if (!mso)&(!IE)]><!--><div style=\"box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\"><!--<![endif]-->\n  \n<table id=\"km_content_6\" style=\"font-family:georgia,palatino;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:0px 32px 36px;font-family:georgia,palatino;\" align=\"left\">\n        \n  <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->\n<div align=\"left\">\n  <!--[if mso]><v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\"https://www.kitchenmasterbistro.com/\" style=\"height:45px; v-text-anchor:middle; width:120px;\" arcsize=\"0%\"  stroke=\"f\" fillcolor=\"#882020\"><w:anchorlock/><center style=\"color:#ffffff;font-family: arial,helvetica,sans-serif; \"><![endif]-->\n    <a href=\"https://www.kitchenmasterbistro.com/\" target=\"_blank\" class=\"v-button\" style=\"box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #882020; border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-family: arial,helvetica,sans-serif; font-size: 13px;\">\n      <span style=\"display:block;padding:16px 24px;line-height:120%;\">Plan your next visit</span>\n    </a>\n    <!--[if mso]></center></v:roundrect><![endif]-->\n</div>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->\n  </div>\n</div>\n<!--[if (mso)|(IE)]></td></tr></table></td><![endif]-->\n      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->\n    </div>\n  </div>\n</div>\n\n\n\n\n\n<div id=\"km_row_7\" class=\"u-row-container\" style=\"padding: 0px;background-color: transparent;\">\n  <div class=\"u-row\" style=\"margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #171513;\">\n    <div style=\"border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;\">\n      <!--[if (mso)|(IE)]><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;background-color: transparent;\"><table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"#171513\"><tr style=\"background-color: #171513;\"><![endif]-->\n      \n<!--[if (mso)|(IE)]><td align=\"center\" width=\"600\" style=\"width: 600px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\" valign=\"top\"><table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td style=\"padding: 0px;\"><![endif]-->\n<div class=\"u-col u-col-100\" style=\"max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;\">\n  <div style=\"height: 100%;width: 100% !important;\">\n  <!--[if (!mso)&(!IE)]><!--><div style=\"box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;\"><!--<![endif]-->\n  \n<table id=\"km_content_7\" style=\"font-family:georgia,palatino;\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n  <tbody>\n    <tr>\n      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:25px 32px;font-family:georgia,palatino;\" align=\"left\">\n        \n  <div style=\"font-family: georgia,palatino; font-size: 16px; color: #171513; line-height: 170%; text-align: left; word-wrap: break-word;\">\n    <p style=\"margin:0;color:#ffffff;font:18px/1.5 Georgia,serif\">Tradition meets innovation.</p><p style=\"margin:10px 0 0;color:#c7c0b7;font:12px/1.6 Arial,sans-serif\">A little closer to the kitchen. A little more to look forward to.</p>\n  </div>\n\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->\n  </div>\n</div>\n<!--[if (mso)|(IE)]></td></tr></table></td><![endif]-->\n      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->\n    </div>\n  </div>\n</div>\n\n\n\n    <!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->\n    </td>\n  </tr>\n  </tbody>\n  </table>\n  <!--[if mso]></div><![endif]-->\n  <!--[if IE]></div><![endif]-->\n</body>\n\n</html>\n",
+    "bodyText": "KITCHEN MASTER — THE INSIDERS EDIT\n\nA little more to look forward to.\n\nPull up a chair. Here’s a little inspiration for your next visit, from our kitchen to your inbox.\n\nIN THE SPOTLIGHT\nSmall dumplings. Something special inside.\nOur signature soup dumplings are made for the first bite, the shared plate, and the meal you’ll want to come back for.\n\nAROUND THE TABLE\nMake it a gathering.\nA catch-up with friends. A family dinner. An occasion worth celebrating. There’s always a reason to share a meal at Kitchen Master.\n\nPlan your next visit: https://www.kitchenmasterbistro.com/\n\nTradition meets innovation."
+  }
+]

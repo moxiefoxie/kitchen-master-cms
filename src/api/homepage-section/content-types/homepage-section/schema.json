@@ -1,12 +1,13 @@
 {
   "kind": "collectionType",
   "collectionName": "homepage_sections",
-  "info": { "singularName": "homepage-section", "pluralName": "homepage-sections", "displayName": "Homepage Section", "description": "Editable homepage sections. Use the Restaurant dropdown for a shared section or a restaurant-specific override." },
+  "info": { "singularName": "homepage-section", "pluralName": "homepage-sections", "displayName": "Homepage Section", "description": "Editable homepage sections. Select one or more Locations for an override, or leave empty with scope all for a shared section." },
   "options": { "draftAndPublish": true },
   "attributes": {
     "name": { "type": "string", "required": true },
     "sectionKey": { "type": "enumeration", "enum": ["location-gateway", "reservations", "story", "featured-menu", "food-menu", "drinks", "happy-hour", "dining-feature", "private-dining", "social-proof", "locations", "connect", "footer"], "required": true },
-    "restaurantScope": { "type": "enumeration", "enum": ["all", "suwanee", "frisco", "southlake", "midtown"], "default": "all", "required": true, "description": "Controls website visibility and provides dropdown filtering. Choose all for the shared section or one restaurant for an override." },
+    "restaurantScope": {"type": "enumeration", "enum": ["all", "suwanee", "frisco", "southlake", "midtown", "multiple"], "default": "all", "required": true, "description": "Legacy scope used only when Locations is empty. Prefer selecting restaurants in Locations."},
+    "locations": {"type": "relation", "relation": "manyToMany", "target": "api::location.location", "description": "Select one or more restaurants. Selected restaurants take precedence over the legacy Restaurant scope. Leave empty with scope all to share everywhere."},
     "location": { "type": "relation", "relation": "manyToOne", "target": "api::location.location", "description": "Legacy relation retained for existing entries. The Restaurant dropdown controls visibility." },
     "eyebrow": { "type": "string" },
     "title": { "type": "string" },

@@ -29,6 +29,8 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
   'cloud-cronjob-runner': {
     enabled: false,
   },
+  'magic-mail': { enabled: true, config: { contentApi: { allowUserRoles: false }, queue: { maxPayloadBytes: 20 * 1024 * 1024, maxDispatchPerMinute: 30 } } },
+  insiders: { enabled: true, resolve: './src/plugins/insiders' },
   'users-permissions': {
     config: {
       jwtManagement: 'refresh',
