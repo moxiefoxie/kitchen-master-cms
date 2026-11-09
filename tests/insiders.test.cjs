@@ -95,3 +95,26 @@ test('campaign retries use the same per-recipient key and skip new opt-outs', as
     if (oldSecret === undefined) delete process.env.INSIDERS_UNSUBSCRIBE_SECRET; else process.env.INSIDERS_UNSUBSCRIBE_SECRET = oldSecret;
   }
 });
+
+test('production sender transfer runs once and preserves an active account', async () => {
+  const previous = process.env.KITCHEN_MASTER_MAIL_ACCOUNT_TRANSFER;
+  process.env.KITCHEN_MASTER_MAIL_ACCOUNT_TRANSFER = JSON.stringify({ fromEmail: 'savannah@andrewandsavannahconsulting.com', config: { encrypted: 'v1:test-only' } });
+  try {
+    for (const active of [false, true]) {
+      const flags = new Map([['initial-email-setup-v1', true]]);
+      const updates = [];
+      const strapi = {
+        store: () => ({ get: async ({ key }) => flags.get(key), set: async ({ key, value }) => flags.set(key, value) }),
+        db: { query: uid => ({ findMany: async () => [{ id: 1 }], findOne: async () => uid.includes('email-account') ? { id: 1, isActive: active } : { id: 2 }, update: async value => updates.push(value) }) },
+        plugin: () => ({ service: () => ({}) }),
+      };
+      await plugin.bootstrap({ strapi });
+      await plugin.bootstrap({ strapi });
+      assert.equal(updates.length, active ? 0 : 1);
+      if (!active) assert.deepEqual(updates[0].data, { config: { encrypted: 'v1:test-only' }, isActive: true });
+    }
+  } finally {
+    if (previous === undefined) delete process.env.KITCHEN_MASTER_MAIL_ACCOUNT_TRANSFER;
+    else process.env.KITCHEN_MASTER_MAIL_ACCOUNT_TRANSFER = previous;
+  }
+});

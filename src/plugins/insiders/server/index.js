@@ -57,6 +57,20 @@ module.exports = {
       fromEmail: SENDER, fromName: 'Kitchen Master', replyTo: SENDER, isActive: false, isPrimary: true,
       dailyLimit: 500, hourlyLimit: 100, config: { host: 'smtp.gmail.com', port: 587, secure: false, user: SENDER, pass: '' },
     });
+    // Optional one-time transfer of the owner's already encrypted sending account.
+    // The matching MagicMail encryption key is supplied through deployment secrets.
+    // Never replace an active production account or replay the transfer on restart.
+    if (process.env.KITCHEN_MASTER_MAIL_ACCOUNT_TRANSFER && !await store.get({ key: 'sender-transfer-v1' })) {
+      const transfer = JSON.parse(process.env.KITCHEN_MASTER_MAIL_ACCOUNT_TRANSFER);
+      if (transfer.fromEmail !== SENDER || typeof transfer.config?.encrypted !== 'string' || !transfer.config.encrypted.startsWith('v1:')) {
+        throw new Error('Invalid encrypted sender transfer.');
+      }
+      const account = await strapi.db.query(ACCOUNT).findOne({ where: { fromEmail: SENDER, provider: 'smtp' } });
+      if (account && !account.isActive) {
+        await strapi.db.query(ACCOUNT).update({ where: { id: account.id }, data: { config: transfer.config, isActive: true } });
+      }
+      await store.set({ key: 'sender-transfer-v1', value: true });
+    }
     const designer = strapi.plugin('magic-mail').service('email-designer');
     for (const template of [
       { templateReferenceId: 1001, name: 'Insiders welcome', subject: 'Welcome to Kitchen Master Insiders', category: 'transactional', bodyHtml: '<h1>Welcome to the table.</h1><p>You’re on the Kitchen Master Insiders list for {{locationName}}. Watch for restaurant news, specials, and upcoming events.</p>', bodyText: 'Welcome to Kitchen Master Insiders for {{locationName}}. Watch for restaurant news, specials, and upcoming events.' },
